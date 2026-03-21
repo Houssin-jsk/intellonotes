@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { signIn } from "next-auth/react";
 import { useRouter } from "@i18n/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { getUserRole } from "@/lib/supabase/queries";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Link } from "@i18n/navigation";
@@ -26,21 +25,24 @@ export function LoginForm() {
     if (!password) return setError(t("errors.passwordRequired"));
 
     setIsLoading(true);
-    const supabase = createClient();
 
     try {
-      const { data, error: authError } = await supabase.auth.signInWithPassword({
+      const result = await signIn("credentials", {
         email,
         password,
+        redirect: false,
       });
 
-      if (authError || !data.user) {
+      if (result?.error || !result?.ok) {
         setError(t("errors.invalidCredentials"));
         return;
       }
 
-      // Use user from sign-in response — no extra getUser() round-trip needed
-      const role = await getUserRole(supabase, data.user.id);
+      // Redirect based on role — fetch fresh session after sign-in
+      const sessionRes = await fetch("/api/auth/session");
+      const session = await sessionRes.json();
+      const role = session?.user?.role;
+
       if (role === "admin") {
         router.push("/admin/payments");
       } else if (role === "professor") {
@@ -84,7 +86,10 @@ export function LoginForm() {
 
       <p className="text-sm text-center text-gray-600">
         {t("noAccount")}{" "}
-        <Link href="/auth/register" className="text-[var(--color-primary-600)] font-medium hover:underline">
+        <Link
+          href="/auth/register"
+          className="text-[var(--color-primary-600)] font-medium hover:underline"
+        >
           {t("signUpLink")}
         </Link>
       </p>

@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { LANGUAGE_COLORS, LANGUAGE_DISPLAY_NAMES } from "@/lib/constants";
-import type { CourseLanguage, CourseLevel } from "@/types/database";
+import type { CourseLanguage, CourseLevel } from "@/types";
 
 export interface CourseCardData {
   id: string;

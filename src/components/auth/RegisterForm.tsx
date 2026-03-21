@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations, useLocale } from "next-intl";
-import { createClient } from "@/lib/supabase/client";
+import { useTranslations } from "next-intl";
+import { signIn } from "next-auth/react";
+import { useRouter } from "@i18n/navigation";
+import { registerUser } from "@/lib/actions/auth";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Link } from "@i18n/navigation";
@@ -12,7 +14,7 @@ type Role = "student" | "professor";
 
 export function RegisterForm() {
   const t = useTranslations("auth");
-  const locale = useLocale();
+  const router = useRouter();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -20,7 +22,6 @@ export function RegisterForm() {
   const [role, setRole] = useState<Role>("student");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -32,20 +33,12 @@ export function RegisterForm() {
     if (password.length < 8) return setError(t("errors.passwordTooShort"));
 
     setIsLoading(true);
-    const supabase = createClient();
 
     try {
-      const { error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { name, role },
-          emailRedirectTo: `${window.location.origin}/${locale}/auth/callback`,
-        },
-      });
+      const result = await registerUser(name, email, password, role);
 
-      if (authError) {
-        if (authError.message.toLowerCase().includes("already registered")) {
+      if (result.error) {
+        if (result.error === "emailAlreadyRegistered") {
           setError(t("errors.emailAlreadyRegistered"));
         } else {
           setError(t("errors.generic"));
@@ -53,21 +46,12 @@ export function RegisterForm() {
         return;
       }
 
-      setSuccess(true);
+      // Auto sign-in after successful registration
+      await signIn("credentials", { email, password, redirect: false });
+      router.push("/dashboard");
     } finally {
       setIsLoading(false);
     }
-  }
-
-  if (success) {
-    return (
-      <div className="rounded-xl bg-green-50 border border-green-200 p-6 text-center">
-        <p className="text-green-800 font-medium">{t("checkEmailTitle")}</p>
-        <p className="text-green-700 text-sm mt-2">
-          {t("checkEmailMessage", { email })}
-        </p>
-      </div>
-    );
   }
 
   return (
@@ -140,7 +124,10 @@ export function RegisterForm() {
 
       <p className="text-sm text-center text-gray-600">
         {t("hasAccount")}{" "}
-        <Link href="/auth/login" className="text-[var(--color-primary-600)] font-medium hover:underline">
+        <Link
+          href="/auth/login"
+          className="text-[var(--color-primary-600)] font-medium hover:underline"
+        >
           {t("signInLink")}
         </Link>
       </p>

@@ -1,13 +1,12 @@
 import { redirect } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
-import { getUserRole } from "@/lib/supabase/queries";
+import { auth } from "@/lib/auth";
 import { Link } from "@i18n/navigation";
 import { BookOpen } from "lucide-react";
 import { PurchasedCourseCard } from "@/components/dashboard/PurchasedCourseCard";
 import type { PurchasedCourse } from "@/components/dashboard/PurchasedCourseCard";
-import type { CourseLanguage } from "@/types/database";
+import { getStudentPurchases, getStudentProgress } from "@/lib/db/queries";
 
 export async function generateMetadata({
   params,
@@ -19,24 +18,7 @@ export async function generateMetadata({
   return { title: t("meta.title") };
 }
 
-// Extends the card's type with a sort key not needed by the card component
 type CourseWithAccess = PurchasedCourse & { lastAccessedAt: string };
-
-// ── Local types (DB rows returned by Supabase join) ───────────────────────────
-
-type PurchaseRow = {
-  course_id: string;
-  courses: { id: string; title: string; language: CourseLanguage } | null;
-};
-
-type ProgressRow = {
-  course_id: string;
-  current_axis: number;
-  is_completed: boolean;
-  last_accessed_at: string; // NOT NULL in DB (DEFAULT now())
-};
-
-// ── Page ──────────────────────────────────────────────────────────────────────
 
 export default async function DashboardPage({
   params,
@@ -46,54 +28,33 @@ export default async function DashboardPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const session = await auth();
 
-  if (!user) {
+  if (!session?.user) {
     redirect(`/${locale}/auth/login`);
   }
 
-  const role = await getUserRole(supabase, user!.id);
-
+  const role = session.user.role;
   if (role !== "student") {
     redirect(`/${locale}`);
   }
 
+  const userId = session.user.id;
+  const userName = session.user.name ?? session.user.email ?? "";
+
   const t = await getTranslations({ locale, namespace: "dashboard" });
 
-  // Student's display name — stored in auth metadata at signup
-  const userName =
-    (user.user_metadata?.name as string | undefined) ?? user.email ?? "";
-
   // ── Parallel fetches ────────────────────────────────────────────────────────
-  const [{ data: purchasesData }, { data: progressData }] = await Promise.all([
-    (supabase
-      .from("purchases")
-      .select("course_id, courses(id, title, language)")
-      .eq("student_id", user!.id)
-      .eq("status", "confirmed")) as unknown as Promise<{
-      data: PurchaseRow[] | null;
-      error: unknown;
-    }>,
-
-    (supabase
-      .from("progress")
-      .select("course_id, current_axis, is_completed, last_accessed_at")
-      .eq("student_id", user!.id)) as unknown as Promise<{
-      data: ProgressRow[] | null;
-      error: unknown;
-    }>,
+  const [purchases, progressList] = await Promise.all([
+    getStudentPurchases(userId),
+    getStudentProgress(userId),
   ]);
 
   // ── Merge + sort ────────────────────────────────────────────────────────────
-  const progressMap = new Map(
-    (progressData ?? []).map((p) => [p.course_id, p])
-  );
+  const progressMap = new Map(progressList.map((p) => [p.course_id, p]));
 
-  const courses: CourseWithAccess[] = (purchasesData ?? [])
-    .filter((p) => p.courses !== null)
+  const courses: CourseWithAccess[] = purchases
+    .filter((p) => p.course !== null)
     .map((p) => {
       const prog = progressMap.get(p.course_id);
       const rawDate = prog?.last_accessed_at;
@@ -108,17 +69,18 @@ export default async function DashboardPage({
           });
       return {
         courseId: p.course_id,
-        title: p.courses!.title,
-        language: p.courses!.language,
+        title: p.course!.title,
+        language: p.course!.language,
         currentAxis: prog?.current_axis ?? 1,
         isCompleted: prog?.is_completed ?? false,
         lastAccessedLabel,
-        // Fall back to epoch so unvisited courses sort last
         lastAccessedAt: rawDate ?? new Date(0).toISOString(),
       };
     })
-    .sort((a, b) =>
-      new Date(b.lastAccessedAt).getTime() - new Date(a.lastAccessedAt).getTime()
+    .sort(
+      (a, b) =>
+        new Date(b.lastAccessedAt).getTime() -
+        new Date(a.lastAccessedAt).getTime()
     );
 
   // ── Render ──────────────────────────────────────────────────────────────────

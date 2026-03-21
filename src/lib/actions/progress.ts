@@ -1,6 +1,7 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@/lib/auth";
+import { getProgress, updateProgress } from "@/lib/db/queries";
 import { revalidatePath } from "next/cache";
 
 type QuizScoreRecord = Record<
@@ -16,58 +17,32 @@ export async function saveQuizResult(
   passed: boolean,
   locale: string
 ): Promise<{ error?: string }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const session = await auth();
+  if (!session?.user) return { error: "unauthenticated" };
 
-  if (!user) return { error: "unauthenticated" };
+  const userId = session.user.id;
 
-  // Fetch current progress
-  const { data: progress } = (await supabase
-    .from("progress")
-    .select("current_axis, quiz_scores, is_completed")
-    .eq("student_id", user.id)
-    .eq("course_id", courseId)
-    .single()) as {
-    data: {
-      current_axis: number;
-      quiz_scores: QuizScoreRecord | null;
-      is_completed: boolean;
-    } | null;
-    error: unknown;
-  };
-
-  if (!progress) return { error: "progressNotFound" };
+  const currentProgress = getProgress(userId, courseId);
+  if (!currentProgress) return { error: "progressNotFound" };
 
   const updatedScores: QuizScoreRecord = {
-    ...(progress.quiz_scores ?? {}),
+    ...(currentProgress.quiz_scores ?? {}),
     [axisNumber]: { score, total, passed },
   };
 
-  // Advance current_axis only when the quiz is passed
   const newCurrentAxis = passed
-    ? Math.min(5, Math.max(progress.current_axis, axisNumber + 1))
-    : progress.current_axis;
+    ? Math.min(5, Math.max(currentProgress.current_axis, axisNumber + 1))
+    : currentProgress.current_axis;
 
   const newIsCompleted =
-    progress.is_completed || (passed && axisNumber === 5);
+    currentProgress.is_completed || (passed && axisNumber === 5);
 
-  const { error: updateError } = (await supabase
-    .from("progress")
-    .update({
-      quiz_scores: updatedScores,
-      current_axis: newCurrentAxis,
-      is_completed: newIsCompleted,
-      last_accessed_at: new Date().toISOString(),
-    } as never)
-    .eq("student_id", user.id)
-    .eq("course_id", courseId)) as {
-    data: unknown;
-    error: { message: string } | null;
-  };
-
-  if (updateError) return { error: "saveFailed" };
+  updateProgress(userId, courseId, {
+    quiz_scores: updatedScores,
+    current_axis: newCurrentAxis,
+    is_completed: newIsCompleted,
+    last_accessed_at: new Date().toISOString(),
+  });
 
   revalidatePath(`/${locale}/courses/${courseId}/learn`);
   return {};

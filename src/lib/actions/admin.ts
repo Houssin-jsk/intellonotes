@@ -1,29 +1,22 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
-import { getUserRole } from "@/lib/supabase/queries";
+import { auth } from "@/lib/auth";
+import { updatePurchaseStatus } from "@/lib/db/queries";
 
 export async function confirmPurchase(
   purchaseId: string,
   locale: string
 ): Promise<{ error?: string }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const session = await auth();
+  if (!session?.user) return { error: "Unauthorized" };
+  if (session.user.role !== "admin") return { error: "Forbidden" };
 
-  if (!user) return { error: "Unauthorized" };
-
-  const role = await getUserRole(supabase, user.id);
-  if (role !== "admin") return { error: "Forbidden" };
-
-  const { error } = await supabase
-    .from("purchases")
-    .update({ status: "confirmed" } as never)
-    .eq("id", purchaseId);
-
-  if (error) return { error: error.message };
+  try {
+    updatePurchaseStatus(purchaseId, "confirmed");
+  } catch {
+    return { error: "updateFailed" };
+  }
 
   revalidatePath(`/${locale}/admin/payments`);
   return {};
@@ -33,22 +26,15 @@ export async function rejectPurchase(
   purchaseId: string,
   locale: string
 ): Promise<{ error?: string }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const session = await auth();
+  if (!session?.user) return { error: "Unauthorized" };
+  if (session.user.role !== "admin") return { error: "Forbidden" };
 
-  if (!user) return { error: "Unauthorized" };
-
-  const role = await getUserRole(supabase, user.id);
-  if (role !== "admin") return { error: "Forbidden" };
-
-  const { error } = await supabase
-    .from("purchases")
-    .update({ status: "rejected" } as never)
-    .eq("id", purchaseId);
-
-  if (error) return { error: error.message };
+  try {
+    updatePurchaseStatus(purchaseId, "rejected");
+  } catch {
+    return { error: "updateFailed" };
+  }
 
   revalidatePath(`/${locale}/admin/payments`);
   return {};

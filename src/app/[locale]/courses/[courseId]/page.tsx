@@ -1,36 +1,16 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@/lib/auth";
 import { Link } from "@i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { AxisTOC } from "@/components/courses/AxisTOC";
 import { PurchaseButton } from "@/components/courses/PurchaseButton";
 import { LANGUAGE_COLORS, LANGUAGE_DISPLAY_NAMES } from "@/lib/constants";
-import type { CourseLanguage, CourseLevel, PurchaseStatus } from "@/types/database";
-
-type CourseDetailRow = {
-  id: string;
-  title: string;
-  description: string;
-  language: CourseLanguage;
-  level: CourseLevel;
-  price: number;
-  objectives: string[];
-  prerequisites: string[];
-  professor: {
-    name: string;
-    bio: string | null;
-    expertise: string | null;
-    avatar_url: string | null;
-  } | null;
-};
-
-type LessonRow = {
-  id: string;
-  title: string;
-  axis_number: number;
-  display_order: number;
-};
+import {
+  getCourseDetail,
+  getCourseLessons,
+  getPurchaseStatus,
+} from "@/lib/db/queries";
 
 export default async function CourseDetailPage({
   params,
@@ -40,62 +20,33 @@ export default async function CourseDetailPage({
   const { locale, courseId } = await params;
   setRequestLocale(locale);
 
-  const [t, tCatalog, tCommon] = await Promise.all([
+  const [t, tCatalog, tCommon, session] = await Promise.all([
     getTranslations("course"),
     getTranslations("catalog"),
     getTranslations("common"),
+    auth(),
   ]);
 
-  const supabase = await createClient();
-
-  // Parallelise independent fetches
-  const [
-    { data: rawCourse },
-    { data: lessonsData },
-    {
-      data: { user },
-    },
-  ] = await Promise.all([
-    supabase
-      .from("courses")
-      .select(
-        "id, title, description, language, level, price, objectives, prerequisites, professor:users!professor_id(name, bio, expertise, avatar_url)"
-      )
-      .eq("id", courseId)
-      .eq("status", "approved")
-      .single(),
-    supabase
-      .from("lessons")
-      .select("id, title, axis_number, display_order")
-      .eq("course_id", courseId)
-      .order("axis_number", { ascending: true })
-      .order("display_order", { ascending: true }),
-    supabase.auth.getUser(),
+  // Parallel: course + lessons (purchase depends on session)
+  const [course, lessons] = await Promise.all([
+    getCourseDetail(courseId),
+    getCourseLessons(courseId),
   ]);
 
-  if (!rawCourse) {
+  if (!course) {
     notFound();
   }
 
-  const course = rawCourse as unknown as CourseDetailRow;
-  const lessons = (lessonsData ?? []) as LessonRow[];
-
-  // Purchase status depends on user — sequential is unavoidable here
-  let purchaseStatus: PurchaseStatus | null = null;
-  if (user) {
-    const { data: purchase } = (await supabase
-      .from("purchases")
-      .select("status")
-      .eq("student_id", user.id)
-      .eq("course_id", courseId)
-      .maybeSingle()) as { data: { status: PurchaseStatus } | null; error: unknown };
+  // Purchase status depends on session
+  const userId = session?.user?.id ?? null;
+  let purchaseStatus: "pending" | "confirmed" | "rejected" | null = null;
+  if (userId) {
+    const purchase = getPurchaseStatus(userId, courseId);
     purchaseStatus = purchase?.status ?? null;
   }
 
   const isPurchased = purchaseStatus === "confirmed";
-  const professor = Array.isArray(course.professor)
-    ? course.professor[0] ?? null
-    : course.professor;
+  const professor = course.professor ?? null;
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8">
@@ -205,7 +156,7 @@ export default async function CourseDetailPage({
               courseId={courseId}
               price={course.price}
               purchaseStatus={purchaseStatus}
-              userId={user?.id ?? null}
+              userId={userId}
             />
 
             <div className="pt-4 border-t border-gray-100 space-y-3 text-sm">

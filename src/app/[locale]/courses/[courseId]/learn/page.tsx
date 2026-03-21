@@ -1,20 +1,19 @@
 import { redirect } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth } from "@/lib/auth";
 import {
   LearningLayout,
   type LessonData,
   type QuizData,
 } from "@/components/learning/LearningLayout";
-import type { CourseLanguage, PurchaseStatus } from "@/types/database";
 import type { QuizQuestion } from "@/types/quiz";
-
-type CourseRow = {
-  id: string;
-  title: string;
-  language: CourseLanguage;
-  pdf_url: string | null;
-};
+import {
+  getPurchaseStatus,
+  getCourseForLearn,
+  getCourseLessonsWithContent,
+  getQuizzesForLessons,
+  upsertProgress,
+} from "@/lib/db/queries";
 
 type QuizScoreRecord = Record<
   string,
@@ -29,108 +28,38 @@ export default async function LearnPage({
   const { locale, courseId } = await params;
   setRequestLocale(locale);
 
-  const supabase = await createClient();
-
   // ── Auth ──────────────────────────────────────────────────────────────────
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  const session = await auth();
+  if (!session?.user) {
     redirect(`/${locale}/auth/login`);
   }
 
-  // ── Purchase validation ───────────────────────────────────────────────────
-  const { data: purchase } = (await supabase
-    .from("purchases")
-    .select("status")
-    .eq("student_id", user.id)
-    .eq("course_id", courseId)
-    .maybeSingle()) as {
-    data: { status: PurchaseStatus } | null;
-    error: unknown;
-  };
+  const userId = session.user.id;
 
+  // ── Purchase validation ───────────────────────────────────────────────────
+  const purchase = getPurchaseStatus(userId, courseId);
   if (!purchase || purchase.status !== "confirmed") {
     redirect(`/${locale}/courses/${courseId}`);
   }
 
-  // ── Round 1: parallel fetches ─────────────────────────────────────────────
-  const [{ data: rawCourse }, { data: lessonsData }] = await Promise.all([
-    supabase
-      .from("courses")
-      .select("id, title, language, pdf_url")
-      .eq("id", courseId)
-      .single(),
-    supabase
-      .from("lessons")
-      .select("id, axis_number, title, content, display_order")
-      .eq("course_id", courseId)
-      .order("axis_number", { ascending: true })
-      .order("display_order", { ascending: true }),
+  // ── Parallel fetches ─────────────────────────────────────────────────────
+  const [course, lessons] = await Promise.all([
+    getCourseForLearn(courseId),
+    getCourseLessonsWithContent(courseId),
   ]);
 
-  if (!rawCourse) {
+  if (!course) {
     redirect(`/${locale}/courses/${courseId}`);
   }
 
-  const course = rawCourse as unknown as CourseRow;
-  const lessons = (lessonsData ?? []) as LessonData[];
   const lessonIds = lessons.map((l) => l.id);
 
-  // ── Round 2: parallel fetches (depend on round 1) ─────────────────────────
-  const quizzesPromise =
-    lessonIds.length > 0
-      ? supabase
-          .from("quizzes")
-          .select("id, axis_number, questions, passing_score")
-          .in("lesson_id", lessonIds)
-      : Promise.resolve({ data: [] as unknown[], error: null });
-
-  const progressPromise = (async () => {
-    // Upsert creates the row on first visit, updates last_accessed_at on return
-    await (supabase
-      .from("progress")
-      .upsert(
-        {
-          student_id: user.id,
-          course_id: courseId,
-          last_accessed_at: new Date().toISOString(),
-        } as never,
-        { onConflict: "student_id,course_id" }
-      ) as unknown as Promise<unknown>);
-
-    return supabase
-      .from("progress")
-      .select("current_axis, quiz_scores, is_completed")
-      .eq("student_id", user.id)
-      .eq("course_id", courseId)
-      .single();
-  })();
-
-  const signedUrlPromise = course.pdf_url
-    ? supabase.storage
-        .from("course-pdfs")
-        .createSignedUrl(course.pdf_url, 3600)
-    : Promise.resolve({ data: null, error: null });
-
-  const [quizzesResult, progressResult, signedUrlResult] = await Promise.all([
-    quizzesPromise,
-    progressPromise,
-    signedUrlPromise,
-  ]);
+  // ── Round 2: quizzes + progress upsert (depend on lessons) ────────────────
+  const quizzes = getQuizzesForLessons(lessonIds);
+  const progressData = upsertProgress(userId, courseId);
 
   // ── Shape the data ────────────────────────────────────────────────────────
-  type RawQuiz = {
-    id: string;
-    axis_number: number;
-    questions: unknown;
-    passing_score: number;
-  };
-
-  const quizzesByAxis: Record<number, QuizData> = (
-    (quizzesResult.data ?? []) as RawQuiz[]
-  ).reduce(
+  const quizzesByAxis: Record<number, QuizData> = quizzes.reduce(
     (acc, q) => {
       acc[q.axis_number] = {
         id: q.id,
@@ -143,27 +72,19 @@ export default async function LearnPage({
     {} as Record<number, QuizData>
   );
 
-  type ProgressRow = {
-    current_axis: number;
-    quiz_scores: QuizScoreRecord | null;
-    is_completed: boolean;
-  };
+  const initialCurrentAxis = progressData?.current_axis ?? 1;
+  const initialQuizScores = (progressData?.quiz_scores ?? {}) as QuizScoreRecord;
+  const initialIsCompleted = progressData?.is_completed ?? false;
 
-  const progress = progressResult.data as ProgressRow | null;
-  const initialCurrentAxis = progress?.current_axis ?? 1;
-  const initialQuizScores = (progress?.quiz_scores ?? {}) as QuizScoreRecord;
-  const initialIsCompleted = progress?.is_completed ?? false;
-
-  const pdfUrl =
-    (signedUrlResult as { data: { signedUrl: string } | null; error: unknown })
-      .data?.signedUrl ?? null;
+  // PDF served via local API route — no signed URL needed
+  const pdfUrl = course.pdf_url ? `/api/pdf/${course.pdf_url}` : null;
 
   return (
     <LearningLayout
       courseId={courseId}
       courseTitle={course.title}
       language={course.language}
-      lessons={lessons}
+      lessons={lessons as LessonData[]}
       quizzesByAxis={quizzesByAxis}
       initialCurrentAxis={initialCurrentAxis}
       initialQuizScores={initialQuizScores}

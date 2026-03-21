@@ -1,25 +1,22 @@
 "use client";
 
 import { useTranslations, useLocale } from "next-intl";
-import { Link, usePathname, useRouter } from "@i18n/navigation";
+import { Link, usePathname } from "@i18n/navigation";
+import { signOut } from "next-auth/react";
 import { useAuth } from "@/hooks/useAuth";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 
 export function Header() {
   const t = useTranslations("nav");
   const locale = useLocale();
   const pathname = usePathname();
-  const router = useRouter();
   const { user, role, isLoading } = useAuth();
 
   const otherLocale = locale === "fr" ? "ar" : "fr";
 
   async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
+    await signOut({ redirect: false });
+    window.location.href = "/";
   }
 
   return (

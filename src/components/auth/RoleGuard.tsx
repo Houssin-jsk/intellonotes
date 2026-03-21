@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "@i18n/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { Spinner } from "@/components/ui/Spinner";
-import type { UserRole } from "@/types/database";
+import type { UserRole } from "@/types";
 
 interface RoleGuardProps {
   allowedRoles: UserRole[];

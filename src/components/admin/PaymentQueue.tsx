@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { createClient } from "@/lib/supabase/client";
 import { PaymentConfirmCard } from "./PaymentConfirmCard";
 import type { PurchaseItem } from "./PaymentConfirmCard";
 
@@ -11,28 +10,11 @@ export function PaymentQueue({ purchases }: { purchases: PurchaseItem[] }) {
   const t = useTranslations("admin.payments");
   const router = useRouter();
 
-  // Refresh the page when a new pending purchase arrives
+  // Poll every 10 seconds for new pending purchases
   useEffect(() => {
-    const supabase = createClient();
-    const channel = supabase
-      .channel("admin-pending-purchases")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "purchases",
-          filter: "status=eq.pending",
-        },
-        () => {
-          router.refresh();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    const POLL_INTERVAL_MS = 10_000;
+    const id = setInterval(() => router.refresh(), POLL_INTERVAL_MS);
+    return () => clearInterval(id);
   }, [router]);
 
   if (purchases.length === 0) {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Noto_Sans_Arabic } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import { SessionProvider } from "next-auth/react";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "../../../i18n/routing";
@@ -57,10 +58,12 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <body className="bg-white text-gray-900 antialiased" suppressHydrationWarning>
-        <NextIntlClientProvider messages={messages}>
-          <Header />
-          {children}
-        </NextIntlClientProvider>
+        <SessionProvider>
+          <NextIntlClientProvider messages={messages}>
+            <Header />
+            {children}
+          </NextIntlClientProvider>
+        </SessionProvider>
       </body>
     </html>
   );

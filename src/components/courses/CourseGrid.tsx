@@ -1,18 +1,6 @@
 import { useTranslations } from "next-intl";
-import { createClient } from "@/lib/supabase/server";
+import { getApprovedCourses } from "@/lib/db/queries";
 import { CourseCard, type CourseCardData } from "./CourseCard";
-import type { CourseLanguage, CourseLevel } from "@/types/database";
-
-// Supabase returns the joined row in this shape
-type CourseQueryRow = {
-  id: string;
-  title: string;
-  description: string;
-  language: CourseLanguage;
-  level: CourseLevel;
-  price: number;
-  professor: { name: string; avatar_url: string | null } | null;
-};
 
 interface CourseGridProps {
   q?: string;
@@ -21,26 +9,18 @@ interface CourseGridProps {
 }
 
 export async function CourseGrid({ q, language, level }: CourseGridProps) {
-  const supabase = await createClient();
+  const rows = await getApprovedCourses({ q, language, level });
 
-  let query = supabase
-    .from("courses")
-    .select("id, title, description, language, level, price, professor:users!professor_id(name, avatar_url)")
-    .eq("status", "approved")
-    .order("created_at", { ascending: false });
-
-  if (q?.trim()) {
-    query = query.ilike("title", `%${q.trim()}%`);
-  }
-  if (language) {
-    query = query.eq("language", language as CourseLanguage);
-  }
-  if (level) {
-    query = query.eq("level", level as CourseLevel);
-  }
-
-  const { data } = await query;
-  const courses = (data ?? []) as CourseQueryRow[] as CourseCardData[];
+  // Map Drizzle result shape to CourseCardData
+  const courses: CourseCardData[] = rows.map((row) => ({
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    language: row.language,
+    level: row.level,
+    price: row.price,
+    professor: row.professor ?? null,
+  }));
 
   if (courses.length === 0) {
     return <EmptyState />;

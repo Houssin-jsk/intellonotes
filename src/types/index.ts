@@ -1,37 +1,47 @@
-export type {
-  Database,
-  UserRole,
-  CourseStatus,
-  CourseLanguage,
-  CourseLevel,
-  PurchaseStatus,
-  WithdrawalStatus,
-  Json,
-} from "./database";
+import type { InferSelectModel } from "drizzle-orm";
+import {
+  users,
+  courses,
+  lessons,
+  quizzes,
+  purchases,
+  progress,
+  withdrawals,
+} from "@/lib/db/schema";
 
-export type { QuizQuestion, MCQQuestion, TrueFalseQuestion, FillBlankQuestion } from "./quiz";
+// ── Base row types ─────────────────────────────────────────────────────────────
 
-// Convenience joined types for common queries
-import type { Database } from "./database";
+export type User = InferSelectModel<typeof users>;
+export type Course = InferSelectModel<typeof courses>;
+export type Lesson = InferSelectModel<typeof lessons>;
+export type Quiz = InferSelectModel<typeof quizzes>;
+export type Purchase = InferSelectModel<typeof purchases>;
+export type Progress = InferSelectModel<typeof progress>;
+export type Withdrawal = InferSelectModel<typeof withdrawals>;
 
-type Tables = Database["public"]["Tables"];
+// ── Enum types (derived from schema) ─────────────────────────────────────────
 
-export type User = Tables["users"]["Row"];
-export type Course = Tables["courses"]["Row"];
-export type Lesson = Tables["lessons"]["Row"];
-export type Quiz = Tables["quizzes"]["Row"];
-export type Purchase = Tables["purchases"]["Row"];
-export type Progress = Tables["progress"]["Row"];
-export type Withdrawal = Tables["withdrawals"]["Row"];
+export type UserRole = User["role"];
+export type CourseStatus = Course["status"];
+export type CourseLanguage = Course["language"];
+export type CourseLevel = Course["level"];
+export type PurchaseStatus = Purchase["status"];
+export type WithdrawalStatus = Withdrawal["status"];
+
+// ── Joined convenience types ──────────────────────────────────────────────────
 
 export type CourseWithProfessor = Course & {
-  users: Pick<User, "name" | "avatar_url" | "bio" | "expertise">;
+  professor: Pick<User, "name" | "avatar_url" | "bio" | "expertise"> | null;
 };
 
 export type PurchaseWithCourse = Purchase & {
-  courses: Course;
+  course: Course | null;
 };
 
 export type ProgressWithCourse = Progress & {
-  courses: Course;
+  course: Course | null;
 };
+
+// ── Quiz types ────────────────────────────────────────────────────────────────
+
+export type { QuizQuestion, MCQQuestion, TrueFalseQuestion, FillBlankQuestion } from "./quiz";

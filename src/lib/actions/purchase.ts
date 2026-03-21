@@ -1,57 +1,52 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
-import { getUserRole } from "@/lib/supabase/queries";
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db/index";
+import { purchases } from "@/lib/db/schema";
+import { getCoursePrice } from "@/lib/db/queries";
 import { calculateCommission } from "@/lib/utils/commission";
 import { revalidatePath } from "next/cache";
+import { v4 as uuidv4 } from "uuid";
 
 export async function createPurchase(
   courseId: string,
   price: number,
   locale: string
 ): Promise<{ error?: string }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const session = await auth();
+  if (!session?.user) return { error: "unauthenticated" };
 
-  if (!user) {
-    return { error: "unauthenticated" };
-  }
-
-  const role = await getUserRole(supabase, user.id);
-  if (role !== "student") {
-    return { error: "forbidden" };
-  }
+  if (session.user.role !== "student") return { error: "forbidden" };
 
   // Re-fetch price from DB — never trust client-provided price
-  const { data: courseData } = (await supabase
-    .from("courses")
-    .select("price")
-    .eq("id", courseId)
-    .eq("status", "approved")
-    .single()) as { data: { price: number } | null; error: unknown };
+  const courseData = getCoursePrice(courseId);
+  if (!courseData) return { error: "courseNotFound" };
 
-  if (!courseData) {
-    return { error: "courseNotFound" };
-  }
+  // Silence unused parameter lint warning
+  void price;
 
   const { professorCommission, platformCommission } = calculateCommission(
     courseData.price
   );
 
-  const { error } = (await supabase.from("purchases").insert({
-    student_id: user.id,
-    course_id: courseId,
-    amount_paid: courseData.price,
-    professor_commission: professorCommission,
-    platform_commission: platformCommission,
-    status: "pending",
-  } as never)) as { error: { code: string; message: string } | null };
-
-  if (error) {
-    // Unique constraint: already has a pending/confirmed purchase
-    if (error.code === "23505") {
+  try {
+    db.insert(purchases)
+      .values({
+        id: uuidv4(),
+        student_id: session.user.id,
+        course_id: courseId,
+        amount_paid: courseData.price,
+        professor_commission: professorCommission,
+        platform_commission: platformCommission,
+        status: "pending",
+      })
+      .run();
+  } catch (e: unknown) {
+    const err = e as { code?: string; message?: string };
+    if (
+      err?.code === "SQLITE_CONSTRAINT_UNIQUE" ||
+      err?.message?.includes("UNIQUE constraint failed")
+    ) {
       return { error: "alreadyPurchased" };
     }
     return { error: "generic" };

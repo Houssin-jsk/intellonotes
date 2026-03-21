@@ -10,7 +10,7 @@ import { QuizEngine } from "./QuizEngine";
 import { SectionErrorBoundary } from "./SectionErrorBoundary";
 import { saveQuizResult } from "@/lib/actions/progress";
 import { EXECUTABLE_LANGUAGES } from "@/lib/constants";
-import type { CourseLanguage } from "@/types/database";
+import type { CourseLanguage } from "@/types";
 import type { QuizQuestion } from "@/types/quiz";
 import type { GradingResult } from "@/lib/utils/quiz-grader";
 import { Spinner } from "@/components/ui/Spinner";

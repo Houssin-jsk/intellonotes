@@ -5,7 +5,7 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
   // Required for Pyodide and Monaco Editor compatibility
-  serverExternalPackages: [],
+  serverExternalPackages: ["better-sqlite3"],
 };
 
 export default withNextIntl(nextConfig);

@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/Button";
 import { usePyodide } from "@/hooks/usePyodide";
 import { EXECUTABLE_LANGUAGES } from "@/lib/constants";
-import type { CourseLanguage } from "@/types/database";
+import type { CourseLanguage } from "@/types";
 
 // Monaco is ~2MB — always dynamically import, never at module level
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {

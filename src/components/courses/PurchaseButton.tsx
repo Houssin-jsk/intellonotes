@@ -7,9 +7,10 @@ import { useRouter } from "@i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Toast, type ToastData } from "@/components/ui/Toast";
-import { useRealtimePurchase } from "@/hooks/useRealtimePurchase";
+import { usePurchasePolling } from "@/hooks/usePurchasePolling";
 import { createPurchase } from "@/lib/actions/purchase";
-import type { PurchaseStatus } from "@/types/database";
+
+type PurchaseStatus = "pending" | "confirmed" | "rejected";
 
 interface PurchaseButtonProps {
   courseId: string;
@@ -17,6 +18,8 @@ interface PurchaseButtonProps {
   purchaseStatus: PurchaseStatus | null;
   /** Pass the authenticated user's ID, or null if not logged in. */
   userId: string | null;
+  /** Purchase ID for polling (only needed when status is pending). */
+  purchaseId?: string | null;
 }
 
 export function PurchaseButton({
@@ -24,6 +27,7 @@ export function PurchaseButton({
   price,
   purchaseStatus,
   userId,
+  purchaseId = null,
 }: PurchaseButtonProps) {
   const t = useTranslations("course");
   const locale = useLocale();
@@ -35,8 +39,7 @@ export function PurchaseButton({
   const [submitted, setSubmitted] = useState(false);
   const [toast, setToast] = useState<ToastData | null>(null);
 
-  // Realtime subscription — active only while status is pending.
-  // Passing null as userId disables the channel entirely.
+  // Polling — active only when status is pending and we have a purchaseId
   const handleStatusChange = useCallback(
     (status: PurchaseStatus) => {
       if (status === "confirmed") {
@@ -50,9 +53,8 @@ export function PurchaseButton({
     [t, router]
   );
 
-  useRealtimePurchase(
-    purchaseStatus === "pending" ? userId : null,
-    courseId,
+  usePurchasePolling(
+    purchaseStatus === "pending" ? purchaseId : null,
     handleStatusChange
   );
 
@@ -77,7 +79,7 @@ export function PurchaseButton({
         setFormError(errorMessages[result.error] ?? errorMessages.generic);
       } else {
         setSubmitted(true);
-        router.refresh(); // update server component so status becomes "pending"
+        router.refresh();
       }
     });
   }
@@ -86,7 +88,6 @@ export function PurchaseButton({
 
   return (
     <>
-      {/* Toast notification for Realtime status changes */}
       {toast && (
         <Toast
           message={toast.message}

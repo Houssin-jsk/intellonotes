@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import { getUserRole } from "@/lib/supabase/queries";
+import { auth } from "@/lib/auth";
 
 export default async function AdminLayout({
   children,
@@ -10,20 +9,13 @@ export default async function AdminLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const supabase = await createClient();
+  const session = await auth();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  if (!session?.user) {
     redirect(`/${locale}/auth/login`);
   }
 
-  // user is non-null here — redirect() above throws internally in Next.js
-  const role = await getUserRole(supabase, user!.id);
-
-  if (role !== "admin") {
+  if (session.user.role !== "admin") {
     redirect(`/${locale}`);
   }
 

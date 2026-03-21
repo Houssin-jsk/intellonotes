@@ -1,21 +1,8 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { getPendingPurchases } from "@/lib/db/queries";
 import { PaymentQueue } from "@/components/admin/PaymentQueue";
 import type { PurchaseItem } from "@/components/admin/PaymentConfirmCard";
-import type { CourseLanguage } from "@/types/database";
-
-// ── Local types (DB rows returned by Supabase join) ───────────────────────────
-
-type PurchaseRow = {
-  id: string;
-  amount_paid: number;
-  purchased_at: string;
-  users: { name: string; email: string } | null;
-  courses: { title: string; language: CourseLanguage } | null;
-};
-
-// ── Metadata ──────────────────────────────────────────────────────────────────
 
 export async function generateMetadata({
   params,
@@ -27,8 +14,6 @@ export async function generateMetadata({
   return { title: t("title") };
 }
 
-// ── Page ──────────────────────────────────────────────────────────────────────
-
 export default async function AdminPaymentsPage({
   params,
 }: {
@@ -39,28 +24,18 @@ export default async function AdminPaymentsPage({
 
   const t = await getTranslations({ locale, namespace: "admin.payments" });
 
-  const supabase = await createClient();
+  const rows = getPendingPurchases();
 
-  // Fetch pending purchases FIFO joined with student + course details
-  const { data } = (await supabase
-    .from("purchases")
-    .select("id, amount_paid, purchased_at, users(name, email), courses(title, language)")
-    .eq("status", "pending")
-    .order("purchased_at", { ascending: true })) as unknown as {
-    data: PurchaseRow[] | null;
-    error: unknown;
-  };
-
-  const purchases: PurchaseItem[] = (data ?? [])
-    .filter((p) => p.users !== null && p.courses !== null)
+  const purchases: PurchaseItem[] = rows
+    .filter((p) => p.student !== null && p.course !== null)
     .map((p) => ({
       id: p.id,
       amount_paid: p.amount_paid,
       purchased_at: p.purchased_at,
-      student_name: p.users!.name,
-      student_email: p.users!.email,
-      course_title: p.courses!.title,
-      course_language: p.courses!.language,
+      student_name: p.student!.name,
+      student_email: p.student!.email ?? "",
+      course_title: p.course!.title,
+      course_language: p.course!.language,
     }));
 
   return (

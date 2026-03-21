@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { LANGUAGE_COLORS, LANGUAGE_DISPLAY_NAMES } from "@/lib/constants";
 import { confirmPurchase, rejectPurchase } from "@/lib/actions/admin";
-import type { CourseLanguage } from "@/types/database";
+import type { CourseLanguage } from "@/types";
 
 export interface PurchaseItem {
   id: string;

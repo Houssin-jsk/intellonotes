@@ -3,7 +3,7 @@ import { Link } from "@i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "./ProgressBar";
 import { LANGUAGE_COLORS, LANGUAGE_DISPLAY_NAMES } from "@/lib/constants";
-import type { CourseLanguage } from "@/types/database";
+import type { CourseLanguage } from "@/types";
 
 export interface PurchasedCourse {
   courseId: string;
