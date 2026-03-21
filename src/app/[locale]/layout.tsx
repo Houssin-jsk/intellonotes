@@ -54,8 +54,9 @@ export default async function LocaleLayout({
       lang={locale}
       dir={dir}
       className={`${inter.variable} ${notoSansArabic.variable}`}
+      suppressHydrationWarning
     >
-      <body className="bg-white text-gray-900 antialiased">
+      <body className="bg-white text-gray-900 antialiased" suppressHydrationWarning>
         <NextIntlClientProvider messages={messages}>
           <Header />
           {children}

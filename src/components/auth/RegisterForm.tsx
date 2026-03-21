@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -12,6 +12,7 @@ type Role = "student" | "professor";
 
 export function RegisterForm() {
   const t = useTranslations("auth");
+  const locale = useLocale();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -39,6 +40,7 @@ export function RegisterForm() {
         password,
         options: {
           data: { name, role },
+          emailRedirectTo: `${window.location.origin}/${locale}/auth/callback`,
         },
       });
 
