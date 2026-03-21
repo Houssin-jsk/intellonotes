@@ -136,8 +136,10 @@
     "title": "دوراتي",
     "welcomeBack": "مرحباً بعودتك، {name}!",
     "continueLearning": "متابعة",
+    "reviewCourse": "مراجعة",
     "axis": "المحور {current}/{total}",
     "completed": "مكتمل",
+    "lastAccessed": "آخر وصول: {date}",
     "noCourses": "لم تشترِ أي دورة بعد.",
     "browseCoursesLink": "تصفح الدورات",
     "meta": {

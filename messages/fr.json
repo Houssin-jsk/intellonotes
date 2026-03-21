@@ -136,8 +136,10 @@
     "title": "Mes cours",
     "welcomeBack": "Bon retour, {name} !",
     "continueLearning": "Continuer",
+    "reviewCourse": "Revoir",
     "axis": "Axe {current}/{total}",
     "completed": "Terminé",
+    "lastAccessed": "Dernier accès : {date}",
     "noCourses": "Vous n'avez pas encore acheté de cours.",
     "browseCoursesLink": "Parcourir les cours",
     "meta": {
