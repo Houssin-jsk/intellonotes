@@ -101,6 +101,10 @@
     "completed": "مكتمل",
     "inProgress": "قيد التقدم",
     "locked": "مقفل",
+    "pdfTitle": "مستند الدورة",
+    "noContent": "لا يوجد محتوى متاح لهذا المحور.",
+    "browseCatalog": "تصفح دورات أخرى",
+    "loading": "جارٍ التحميل…",
     "quiz": {
       "title": "اختبار — المحور {number}",
       "submit": "تأكيد الإجابات",
@@ -116,7 +120,9 @@
         "true": "صحيح",
         "false": "خطأ"
       },
-      "fillBlank": "إجابتك"
+      "fillBlank": "إجابتك",
+      "allAnswersRequired": "يرجى الإجابة على جميع الأسئلة قبل التأكيد.",
+      "saveFailed": "تعذّر حفظ النتيجة. يرجى المحاولة مرة أخرى."
     },
     "playground": {
       "run": "تشغيل",

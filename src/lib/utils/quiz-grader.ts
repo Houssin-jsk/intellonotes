@@ -74,7 +74,8 @@ function getCorrectAnswer(q: QuizQuestion): string {
     case "mcq":
       return q.options[q.correct_index];
     case "true_false":
-      return q.correct_answer ? "Vrai" : "Faux";
+      // Return raw boolean string — callers must translate for display
+      return String(q.correct_answer);
     case "fill_blank":
       return q.correct_answers[0];
   }

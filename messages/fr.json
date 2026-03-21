@@ -101,6 +101,10 @@
     "completed": "Terminé",
     "inProgress": "En cours",
     "locked": "Verrouillé",
+    "pdfTitle": "Support de cours",
+    "noContent": "Aucun contenu disponible pour cet axe.",
+    "browseCatalog": "Parcourir d'autres cours",
+    "loading": "Chargement…",
     "quiz": {
       "title": "Quiz — Axe {number}",
       "submit": "Valider mes réponses",
@@ -116,7 +120,9 @@
         "true": "Vrai",
         "false": "Faux"
       },
-      "fillBlank": "Votre réponse"
+      "fillBlank": "Votre réponse",
+      "allAnswersRequired": "Veuillez répondre à toutes les questions avant de valider.",
+      "saveFailed": "Impossible de sauvegarder le résultat. Réessayez."
     },
     "playground": {
       "run": "Exécuter",
