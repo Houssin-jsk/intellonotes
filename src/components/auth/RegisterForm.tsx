@@ -33,26 +33,28 @@ export function RegisterForm() {
     setIsLoading(true);
     const supabase = createClient();
 
-    const { error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { name, role },
-      },
-    });
+    try {
+      const { error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name, role },
+        },
+      });
 
-    setIsLoading(false);
-
-    if (authError) {
-      if (authError.message.toLowerCase().includes("already registered")) {
-        setError(t("errors.emailAlreadyRegistered"));
-      } else {
-        setError(t("errors.generic"));
+      if (authError) {
+        if (authError.message.toLowerCase().includes("already registered")) {
+          setError(t("errors.emailAlreadyRegistered"));
+        } else {
+          setError(t("errors.generic"));
+        }
+        return;
       }
-      return;
-    }
 
-    setSuccess(true);
+      setSuccess(true);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   if (success) {

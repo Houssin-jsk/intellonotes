@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { CheckCircle, XCircle, X } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
@@ -15,10 +15,16 @@ interface ToastProps extends ToastData {
 }
 
 export function Toast({ message, variant, onDismiss, duration = 6000 }: ToastProps) {
+  // Store onDismiss in a ref so the timer is not reset when the parent
+  // re-renders (e.g. after router.refresh()), which would create a new
+  // arrow function reference on every render.
+  const onDismissRef = useRef(onDismiss);
+  onDismissRef.current = onDismiss;
+
   useEffect(() => {
-    const timer = setTimeout(onDismiss, duration);
+    const timer = setTimeout(() => onDismissRef.current(), duration);
     return () => clearTimeout(timer);
-  }, [onDismiss, duration]);
+  }, [duration]); // intentionally excludes onDismiss — handled via ref
 
   return (
     <div
