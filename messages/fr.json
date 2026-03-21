@@ -6,7 +6,8 @@
     "login": "Connexion",
     "register": "Inscription",
     "logout": "Déconnexion",
-    "admin": "Administration"
+    "admin": "Administration",
+    "myCourses": "Mes cours"
   },
   "auth": {
     "loginTitle": "Se connecter",
@@ -162,6 +163,143 @@
     },
     "meta": {
       "title": "Administration — IntelloNotes"
+    }
+  },
+  "professor": {
+    "courses": {
+      "title": "Mes cours",
+      "courseCount": "{count, plural, =0 {Aucun cours} one {# cours} other {# cours}}",
+      "createCourse": "Créer un cours",
+      "empty": "Vous n'avez pas encore créé de cours.",
+      "emptyHint": "Commencez par créer votre premier cours.",
+      "createFirst": "Créer mon premier cours",
+      "status": {
+        "draft": "Brouillon",
+        "pending": "En attente de validation",
+        "approved": "Publié",
+        "rejected": "Refusé",
+        "suspended": "Suspendu"
+      },
+      "actions": {
+        "edit": "Modifier",
+        "submitForReview": "Soumettre pour validation",
+        "resubmit": "Resoumettre",
+        "delete": "Supprimer",
+        "underReview": "En cours de validation",
+        "published": "Publié"
+      },
+      "deleteConfirm": "Êtes-vous sûr de vouloir supprimer ce brouillon ?",
+      "deleteConfirmAction": "Supprimer",
+      "updated": "Modifié le {date}"
+    },
+    "courseForm": {
+      "createTitle": "Créer un cours",
+      "titleLabel": "Titre du cours",
+      "titlePlaceholder": "Ex : Introduction à Python",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Décrivez le contenu et les objectifs de votre cours...",
+      "languageLabel": "Langage de programmation",
+      "languagePlaceholder": "Sélectionnez un langage",
+      "levelLabel": "Niveau",
+      "levelPlaceholder": "Sélectionnez un niveau",
+      "priceLabel": "Prix",
+      "objectivesLabel": "Objectifs d'apprentissage",
+      "objectivesPlaceholder": "Ex : Maîtriser les bases de Python",
+      "addObjective": "Ajouter un objectif",
+      "prerequisitesLabel": "Prérequis",
+      "prerequisitesPlaceholder": "Ex : Notions de base en informatique",
+      "addPrerequisite": "Ajouter un prérequis",
+      "submitCreate": "Créer le cours",
+      "levels": {
+        "beginner": "Débutant",
+        "intermediate": "Intermédiaire"
+      },
+      "errors": {
+        "titleRequired": "Le titre est requis.",
+        "titleTooShort": "Le titre doit contenir au moins 3 caractères.",
+        "descriptionRequired": "La description est requise.",
+        "descriptionTooShort": "La description doit contenir au moins 10 caractères.",
+        "languageRequired": "Veuillez sélectionner un langage.",
+        "levelRequired": "Veuillez sélectionner un niveau.",
+        "priceRequired": "Veuillez sélectionner un prix.",
+        "generic": "Une erreur est survenue. Veuillez réessayer."
+      },
+      "success": {
+        "created": "Cours créé avec succès.",
+        "submitted": "Cours soumis pour validation.",
+        "deleted": "Brouillon supprimé."
+      }
+    },
+    "courseEditor": {
+      "title": "Modifier le contenu",
+      "pdfSection": "Document PDF du cours",
+      "pdfUpload": "Importer un PDF",
+      "pdfDragDrop": "Glissez un fichier PDF ici ou cliquez pour sélectionner",
+      "pdfMaxSize": "Format PDF uniquement, 20 Mo maximum",
+      "pdfUploading": "Importation en cours...",
+      "pdfRemove": "Supprimer le PDF",
+      "pdfPreview": "Aperçu",
+      "pdfUploadSuccess": "PDF importé avec succès.",
+      "pdfUploadError": "Échec de l'importation du PDF.",
+      "pdfDeleteSuccess": "PDF supprimé.",
+      "pdfTooLarge": "Le fichier dépasse 20 Mo.",
+      "pdfInvalidType": "Seuls les fichiers PDF sont acceptés.",
+      "axisStatus": {
+        "filled": "Complété",
+        "empty": "À remplir"
+      },
+      "lessonTitle": "Titre de la leçon",
+      "lessonTitlePlaceholder": "Ex : Introduction aux variables",
+      "lessonContent": "Contenu de la leçon",
+      "lessonContentPlaceholder": "Rédigez le contenu de cette leçon...",
+      "quizSection": "Questions du quiz",
+      "questionCount": "{count, plural, =0 {Aucune question} one {# question} other {# questions}}",
+      "addQuestion": "Ajouter une question",
+      "removeQuestion": "Supprimer",
+      "questionTypes": {
+        "mcq": "Choix multiple",
+        "true_false": "Vrai / Faux",
+        "fill_blank": "Texte à trou"
+      },
+      "questionText": "Énoncé de la question",
+      "questionTextPlaceholder": "Tapez votre question ici...",
+      "mcqOption": "Option {letter}",
+      "mcqAddOption": "Ajouter une option",
+      "mcqCorrectAnswer": "Réponse correcte",
+      "trueFalseCorrect": "Réponse correcte",
+      "trueFalseTrue": "Vrai",
+      "trueFalseFalse": "Faux",
+      "fillBlankHint": "Utilisez {{BLANK}} dans le texte pour marquer le trou",
+      "fillBlankAnswer": "Réponse acceptée",
+      "fillBlankAddAnswer": "Ajouter une réponse alternative",
+      "fillBlankCaseSensitive": "Sensible à la casse",
+      "explanation": "Explication (optionnel)",
+      "explanationPlaceholder": "Explication après correction...",
+      "saveAxis": "Enregistrer l'axe {number}",
+      "saving": "Enregistrement...",
+      "saveSuccess": "Axe {number} enregistré.",
+      "saveError": "Erreur lors de l'enregistrement.",
+      "submitForReview": "Soumettre pour validation",
+      "submitDisabledHint": "Complétez les 5 axes avant de soumettre.",
+      "incompleteContent": "Tous les axes doivent avoir une leçon et un quiz avant la soumission.",
+      "errors": {
+        "lessonTitleRequired": "Le titre de la leçon est requis.",
+        "lessonTitleTooShort": "Le titre doit contenir au moins 3 caractères.",
+        "lessonContentRequired": "Le contenu de la leçon est requis.",
+        "lessonContentTooShort": "Le contenu doit contenir au moins 10 caractères.",
+        "quizRequired": "Au moins une question est requise.",
+        "questionTextRequired": "L'énoncé de la question est requis.",
+        "mcqMinOptions": "Au moins 2 options sont requises.",
+        "mcqCorrectRequired": "Sélectionnez la réponse correcte.",
+        "fillBlankMissingMarker": "Le texte doit contenir {{BLANK}}.",
+        "fillBlankAnswerRequired": "Au moins une réponse est requise.",
+        "generic": "Une erreur est survenue. Veuillez réessayer."
+      }
+    },
+    "meta": {
+      "title": "Mes cours — IntelloNotes",
+      "createTitle": "Créer un cours — IntelloNotes",
+      "editTitle": "Modifier le cours — IntelloNotes"
     }
   },
   "common": {

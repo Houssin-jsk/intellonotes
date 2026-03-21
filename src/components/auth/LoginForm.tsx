@@ -48,7 +48,7 @@ export function LoginForm() {
       if (role === "admin") {
         router.push("/admin/payments");
       } else if (role === "professor") {
-        router.push("/");
+        router.push("/professor/courses");
       } else {
         router.push("/dashboard");
       }

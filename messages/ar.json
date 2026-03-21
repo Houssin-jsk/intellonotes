@@ -6,7 +6,8 @@
     "login": "تسجيل الدخول",
     "register": "إنشاء حساب",
     "logout": "تسجيل الخروج",
-    "admin": "الإدارة"
+    "admin": "الإدارة",
+    "myCourses": "دوراتي"
   },
   "auth": {
     "loginTitle": "تسجيل الدخول",
@@ -162,6 +163,143 @@
     },
     "meta": {
       "title": "الإدارة — IntelloNotes"
+    }
+  },
+  "professor": {
+    "courses": {
+      "title": "دوراتي",
+      "courseCount": "{count, plural, =0 {لا توجد دورات} one {دورة واحدة} two {دورتان} few {# دورات} many {# دورة} other {# دورة}}",
+      "createCourse": "إنشاء دورة",
+      "empty": "لم تقم بإنشاء أي دورة بعد.",
+      "emptyHint": "ابدأ بإنشاء دورتك الأولى.",
+      "createFirst": "إنشاء دورتي الأولى",
+      "status": {
+        "draft": "مسودة",
+        "pending": "في انتظار المراجعة",
+        "approved": "منشور",
+        "rejected": "مرفوض",
+        "suspended": "معلق"
+      },
+      "actions": {
+        "edit": "تعديل",
+        "submitForReview": "تقديم للمراجعة",
+        "resubmit": "إعادة التقديم",
+        "delete": "حذف",
+        "underReview": "قيد المراجعة",
+        "published": "منشور"
+      },
+      "deleteConfirm": "هل أنت متأكد من حذف هذه المسودة؟",
+      "deleteConfirmAction": "حذف",
+      "updated": "تم التعديل في {date}"
+    },
+    "courseForm": {
+      "createTitle": "إنشاء دورة",
+      "titleLabel": "عنوان الدورة",
+      "titlePlaceholder": "مثال: مقدمة في بايثون",
+      "descriptionLabel": "الوصف",
+      "descriptionPlaceholder": "صف محتوى وأهداف دورتك...",
+      "languageLabel": "لغة البرمجة",
+      "languagePlaceholder": "اختر لغة",
+      "levelLabel": "المستوى",
+      "levelPlaceholder": "اختر مستوى",
+      "priceLabel": "السعر",
+      "objectivesLabel": "أهداف التعلم",
+      "objectivesPlaceholder": "مثال: إتقان أساسيات بايثون",
+      "addObjective": "إضافة هدف",
+      "prerequisitesLabel": "المتطلبات الأساسية",
+      "prerequisitesPlaceholder": "مثال: معرفة أساسية بالحاسوب",
+      "addPrerequisite": "إضافة متطلب",
+      "submitCreate": "إنشاء الدورة",
+      "levels": {
+        "beginner": "مبتدئ",
+        "intermediate": "متوسط"
+      },
+      "errors": {
+        "titleRequired": "العنوان مطلوب.",
+        "titleTooShort": "يجب أن يحتوي العنوان على 3 أحرف على الأقل.",
+        "descriptionRequired": "الوصف مطلوب.",
+        "descriptionTooShort": "يجب أن يحتوي الوصف على 10 أحرف على الأقل.",
+        "languageRequired": "يرجى اختيار لغة.",
+        "levelRequired": "يرجى اختيار مستوى.",
+        "priceRequired": "يرجى اختيار سعر.",
+        "generic": "حدث خطأ. يرجى المحاولة مرة أخرى."
+      },
+      "success": {
+        "created": "تم إنشاء الدورة بنجاح.",
+        "submitted": "تم تقديم الدورة للمراجعة.",
+        "deleted": "تم حذف المسودة."
+      }
+    },
+    "courseEditor": {
+      "title": "تعديل المحتوى",
+      "pdfSection": "مستند PDF للدورة",
+      "pdfUpload": "استيراد PDF",
+      "pdfDragDrop": "اسحب ملف PDF هنا أو انقر للاختيار",
+      "pdfMaxSize": "ملفات PDF فقط، 20 ميغابايت كحد أقصى",
+      "pdfUploading": "جارٍ الاستيراد...",
+      "pdfRemove": "حذف PDF",
+      "pdfPreview": "معاينة",
+      "pdfUploadSuccess": "تم استيراد PDF بنجاح.",
+      "pdfUploadError": "فشل استيراد PDF.",
+      "pdfDeleteSuccess": "تم حذف PDF.",
+      "pdfTooLarge": "الملف يتجاوز 20 ميغابايت.",
+      "pdfInvalidType": "يُقبل فقط ملفات PDF.",
+      "axisStatus": {
+        "filled": "مكتمل",
+        "empty": "للملء"
+      },
+      "lessonTitle": "عنوان الدرس",
+      "lessonTitlePlaceholder": "مثال: مقدمة في المتغيرات",
+      "lessonContent": "محتوى الدرس",
+      "lessonContentPlaceholder": "اكتب محتوى هذا الدرس...",
+      "quizSection": "أسئلة الاختبار",
+      "questionCount": "{count, plural, =0 {لا توجد أسئلة} one {سؤال واحد} two {سؤالان} few {# أسئلة} many {# سؤالاً} other {# سؤال}}",
+      "addQuestion": "إضافة سؤال",
+      "removeQuestion": "حذف",
+      "questionTypes": {
+        "mcq": "اختيار من متعدد",
+        "true_false": "صحيح / خطأ",
+        "fill_blank": "ملء الفراغ"
+      },
+      "questionText": "نص السؤال",
+      "questionTextPlaceholder": "اكتب سؤالك هنا...",
+      "mcqOption": "الخيار {letter}",
+      "mcqAddOption": "إضافة خيار",
+      "mcqCorrectAnswer": "الإجابة الصحيحة",
+      "trueFalseCorrect": "الإجابة الصحيحة",
+      "trueFalseTrue": "صحيح",
+      "trueFalseFalse": "خطأ",
+      "fillBlankHint": "استخدم {{BLANK}} في النص لتحديد الفراغ",
+      "fillBlankAnswer": "إجابة مقبولة",
+      "fillBlankAddAnswer": "إضافة إجابة بديلة",
+      "fillBlankCaseSensitive": "حساس لحالة الأحرف",
+      "explanation": "شرح (اختياري)",
+      "explanationPlaceholder": "شرح بعد التصحيح...",
+      "saveAxis": "حفظ المحور {number}",
+      "saving": "جارٍ الحفظ...",
+      "saveSuccess": "تم حفظ المحور {number}.",
+      "saveError": "خطأ أثناء الحفظ.",
+      "submitForReview": "تقديم للمراجعة",
+      "submitDisabledHint": "أكمل المحاور الخمسة قبل التقديم.",
+      "incompleteContent": "يجب أن تحتوي جميع المحاور على درس واختبار قبل التقديم.",
+      "errors": {
+        "lessonTitleRequired": "عنوان الدرس مطلوب.",
+        "lessonTitleTooShort": "يجب أن يحتوي العنوان على 3 أحرف على الأقل.",
+        "lessonContentRequired": "محتوى الدرس مطلوب.",
+        "lessonContentTooShort": "يجب أن يحتوي المحتوى على 10 أحرف على الأقل.",
+        "quizRequired": "مطلوب سؤال واحد على الأقل.",
+        "questionTextRequired": "نص السؤال مطلوب.",
+        "mcqMinOptions": "مطلوب خياران على الأقل.",
+        "mcqCorrectRequired": "اختر الإجابة الصحيحة.",
+        "fillBlankMissingMarker": "يجب أن يحتوي النص على {{BLANK}}.",
+        "fillBlankAnswerRequired": "مطلوب إجابة واحدة على الأقل.",
+        "generic": "حدث خطأ. يرجى المحاولة مرة أخرى."
+      }
+    },
+    "meta": {
+      "title": "دوراتي — IntelloNotes",
+      "createTitle": "إنشاء دورة — IntelloNotes",
+      "editTitle": "تعديل الدورة — IntelloNotes"
     }
   },
   "common": {

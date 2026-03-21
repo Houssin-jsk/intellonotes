@@ -361,6 +361,80 @@ export function updateProgress(
     .run();
 }
 
+// ── Professor queries ─────────────────────────────────────────────────────────
+
+export function getProfessorCourses(professorId: string) {
+  return db
+    .select({
+      id: courses.id,
+      title: courses.title,
+      language: courses.language,
+      level: courses.level,
+      price: courses.price,
+      status: courses.status,
+      updated_at: courses.updated_at,
+    })
+    .from(courses)
+    .where(eq(courses.professor_id, professorId))
+    .orderBy(desc(courses.updated_at))
+    .all();
+}
+
+export function getProfessorCourseById(courseId: string, professorId: string) {
+  return db
+    .select()
+    .from(courses)
+    .where(and(eq(courses.id, courseId), eq(courses.professor_id, professorId)))
+    .get();
+}
+
+// ── Course content for editor ─────────────────────────────────────────────────
+
+export function getCourseContentForEditor(courseId: string) {
+  const allLessons = db
+    .select({
+      id: lessons.id,
+      title: lessons.title,
+      axis_number: lessons.axis_number,
+      content: lessons.content,
+    })
+    .from(lessons)
+    .where(eq(lessons.course_id, courseId))
+    .orderBy(asc(lessons.axis_number))
+    .all();
+
+  const lessonIds = allLessons.map((l) => l.id);
+  const allQuizzes =
+    lessonIds.length > 0
+      ? db
+          .select({
+            id: quizzes.id,
+            lesson_id: quizzes.lesson_id,
+            axis_number: quizzes.axis_number,
+            questions: quizzes.questions,
+            passing_score: quizzes.passing_score,
+          })
+          .from(quizzes)
+          .where(inArray(quizzes.lesson_id, lessonIds))
+          .all()
+      : [];
+
+  return { lessons: allLessons, quizzes: allQuizzes };
+}
+
+export function getLessonForAxis(courseId: string, axisNumber: number) {
+  return db
+    .select({ id: lessons.id })
+    .from(lessons)
+    .where(
+      and(
+        eq(lessons.course_id, courseId),
+        eq(lessons.axis_number, axisNumber)
+      )
+    )
+    .get();
+}
+
 // ── Admin purchase mutations ───────────────────────────────────────────────────
 
 export function updatePurchaseStatus(

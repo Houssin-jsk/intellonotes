@@ -55,6 +55,14 @@ export function Header() {
                         {t("admin")}
                       </Link>
                     )}
+                    {role === "professor" && (
+                      <Link
+                        href="/professor/courses"
+                        className="text-sm text-gray-600 hover:text-gray-900"
+                      >
+                        {t("myCourses")}
+                      </Link>
+                    )}
                     {role === "student" && (
                       <Link
                         href="/dashboard"
