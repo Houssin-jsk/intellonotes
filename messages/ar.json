@@ -76,6 +76,9 @@
     "objectives": "أهداف التعلم",
     "prerequisites": "المتطلبات الأساسية",
     "tableOfContents": "محتوى الدورة",
+    "lessonsLabel": "دروس",
+    "lockedAxisMessage": "اشترِ هذه الدورة للوصول إلى هذا المحور.",
+    "noLessonsYet": "لا توجد دروس حاليًا.",
     "paymentModal": {
       "title": "تعليمات الدفع",
       "cashplus": "الدفع عبر CashPlus",

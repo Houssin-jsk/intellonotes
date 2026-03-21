@@ -76,6 +76,9 @@
     "objectives": "Objectifs d'apprentissage",
     "prerequisites": "Prérequis",
     "tableOfContents": "Programme du cours",
+    "lessonsLabel": "leçons",
+    "lockedAxisMessage": "Achetez ce cours pour accéder à cet axe.",
+    "noLessonsYet": "Aucune leçon pour le moment.",
     "paymentModal": {
       "title": "Instructions de paiement",
       "cashplus": "Paiement CashPlus",
