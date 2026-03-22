@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { Link } from "@i18n/navigation";
 import { Badge } from "@/components/ui/Badge";
@@ -11,6 +12,20 @@ import {
   getCourseLessons,
   getPurchaseStatus,
 } from "@/lib/db/queries";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; courseId: string }>;
+}): Promise<Metadata> {
+  const { courseId } = await params;
+  const course = getCourseDetail(courseId);
+  if (!course) return { title: "IntelloNotes" };
+  return {
+    title: `${course.title} — IntelloNotes`,
+    description: course.description?.slice(0, 160),
+  };
+}
 
 export default async function CourseDetailPage({
   params,

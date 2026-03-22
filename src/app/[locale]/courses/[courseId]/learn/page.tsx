@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import {
   LearningLayout,
@@ -14,6 +15,17 @@ import {
   getQuizzesForLessons,
   upsertProgress,
 } from "@/lib/db/queries";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; courseId: string }>;
+}): Promise<Metadata> {
+  const { courseId } = await params;
+  const course = getCourseForLearn(courseId);
+  if (!course) return { title: "IntelloNotes" };
+  return { title: `${course.title} — IntelloNotes` };
+}
 
 type QuizScoreRecord = Record<
   string,
