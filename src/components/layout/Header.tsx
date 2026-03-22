@@ -79,6 +79,12 @@ export function Header() {
                         {t("dashboard")}
                       </Link>
                     )}
+                    <Link
+                      href="/profile"
+                      className="text-sm text-gray-600 hover:text-gray-900"
+                    >
+                      {t("profile")}
+                    </Link>
                     <Button variant="ghost" size="sm" onClick={handleLogout}>
                       {t("logout")}
                     </Button>

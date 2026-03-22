@@ -8,7 +8,8 @@
     "logout": "Déconnexion",
     "admin": "Administration",
     "myCourses": "Mes cours",
-    "earnings": "Revenus"
+    "earnings": "Revenus",
+    "profile": "Profil"
   },
   "auth": {
     "loginTitle": "Se connecter",
@@ -399,6 +400,29 @@
       "title": "Mes cours — IntelloNotes",
       "createTitle": "Créer un cours — IntelloNotes",
       "editTitle": "Modifier le cours — IntelloNotes"
+    }
+  },
+  "profile": {
+    "metaTitle": "Mon profil — IntelloNotes",
+    "title": "Mon profil",
+    "email": "E-mail",
+    "role": "Rôle",
+    "memberSince": "Membre depuis",
+    "nameLabel": "Nom complet",
+    "bioLabel": "Biographie",
+    "bioPlaceholder": "Parlez de vous en quelques mots...",
+    "expertiseLabel": "Domaine d'expertise",
+    "expertisePlaceholder": "Ex : Python, Data Science, Web",
+    "save": "Enregistrer",
+    "saveSuccess": "Profil mis à jour avec succès.",
+    "roles": {
+      "student": "Étudiant",
+      "professor": "Professeur",
+      "admin": "Administrateur"
+    },
+    "errors": {
+      "nameRequired": "Le nom est requis (2 caractères minimum).",
+      "generic": "Une erreur est survenue. Veuillez réessayer."
     }
   },
   "common": {

@@ -8,7 +8,8 @@
     "logout": "تسجيل الخروج",
     "admin": "الإدارة",
     "myCourses": "دوراتي",
-    "earnings": "الأرباح"
+    "earnings": "الأرباح",
+    "profile": "الملف الشخصي"
   },
   "auth": {
     "loginTitle": "تسجيل الدخول",
@@ -399,6 +400,29 @@
       "title": "دوراتي — IntelloNotes",
       "createTitle": "إنشاء دورة — IntelloNotes",
       "editTitle": "تعديل الدورة — IntelloNotes"
+    }
+  },
+  "profile": {
+    "metaTitle": "ملفي الشخصي — IntelloNotes",
+    "title": "ملفي الشخصي",
+    "email": "البريد الإلكتروني",
+    "role": "الدور",
+    "memberSince": "عضو منذ",
+    "nameLabel": "الاسم الكامل",
+    "bioLabel": "نبذة شخصية",
+    "bioPlaceholder": "تحدث عن نفسك بإيجاز...",
+    "expertiseLabel": "مجال التخصص",
+    "expertisePlaceholder": "مثال: بايثون، علم البيانات، الويب",
+    "save": "حفظ",
+    "saveSuccess": "تم تحديث الملف الشخصي بنجاح.",
+    "roles": {
+      "student": "طالب",
+      "professor": "أستاذ",
+      "admin": "مدير"
+    },
+    "errors": {
+      "nameRequired": "الاسم مطلوب (حرفان على الأقل).",
+      "generic": "حدث خطأ. يرجى المحاولة مرة أخرى."
     }
   },
   "common": {
