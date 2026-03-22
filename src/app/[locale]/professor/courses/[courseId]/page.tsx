@@ -96,12 +96,22 @@ export default async function CourseEditorPage({
         ← {tCommon("back")}
       </Link>
 
-      <div className="flex items-center gap-3 mb-8">
+      <div className="flex items-center gap-3 mb-6">
         <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
         <Badge className={statusColors[course.status] ?? "bg-gray-100 text-gray-600"}>
           {tEditor("title")}
         </Badge>
       </div>
+
+      {course.status === "rejected" && course.rejection_reason && (
+        <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm font-semibold text-red-700 mb-1">
+            {tEditor("rejectionReasonLabel")}
+          </p>
+          <p className="text-sm text-red-600">{course.rejection_reason}</p>
+          <p className="text-xs text-red-500 mt-2">{tEditor("rejectionFixHint")}</p>
+        </div>
+      )}
 
       <CourseEditor
         course={{

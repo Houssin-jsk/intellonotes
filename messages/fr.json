@@ -382,6 +382,8 @@
       "submitForReview": "Soumettre pour validation",
       "submitDisabledHint": "Complétez les 5 axes avant de soumettre.",
       "incompleteContent": "Tous les axes doivent avoir une leçon et un quiz avant la soumission.",
+      "rejectionReasonLabel": "Motif du refus",
+      "rejectionFixHint": "Corrigez les points mentionnés ci-dessus puis resoumettez votre cours.",
       "errors": {
         "lessonTitleRequired": "Le titre de la leçon est requis.",
         "lessonTitleTooShort": "Le titre doit contenir au moins 3 caractères.",

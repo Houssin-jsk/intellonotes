@@ -382,6 +382,8 @@
       "submitForReview": "تقديم للمراجعة",
       "submitDisabledHint": "أكمل المحاور الخمسة قبل التقديم.",
       "incompleteContent": "يجب أن تحتوي جميع المحاور على درس واختبار قبل التقديم.",
+      "rejectionReasonLabel": "سبب الرفض",
+      "rejectionFixHint": "قم بتصحيح النقاط المذكورة أعلاه ثم أعد تقديم دورتك.",
       "errors": {
         "lessonTitleRequired": "عنوان الدرس مطلوب.",
         "lessonTitleTooShort": "يجب أن يحتوي العنوان على 3 أحرف على الأقل.",
