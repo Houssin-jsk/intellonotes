@@ -7,7 +7,8 @@
     "register": "إنشاء حساب",
     "logout": "تسجيل الخروج",
     "admin": "الإدارة",
-    "myCourses": "دوراتي"
+    "myCourses": "دوراتي",
+    "earnings": "الأرباح"
   },
   "auth": {
     "loginTitle": "تسجيل الدخول",
@@ -246,6 +247,30 @@
       "deleteConfirmAction": "حذف",
       "updated": "تم التعديل في {date}",
       "rejectionReason": "سبب الرفض"
+    },
+    "earnings": {
+      "metaTitle": "أرباحي — IntelloNotes",
+      "title": "أرباحي",
+      "totalEarned": "إجمالي الأرباح",
+      "availableBalance": "الرصيد المتاح",
+      "pendingWithdrawals": "سحوبات معلقة",
+      "totalWithdrawn": "إجمالي المسحوب",
+      "commissionInfo": "تحصل على 70% من سعر كل دورة مباعة. تحتفظ المنصة بـ 30% المتبقية.",
+      "minWithdrawal": "الحد الأدنى للسحب: {amount} درهم",
+      "transactionHistory": "سجل المبيعات",
+      "noTransactions": "لا توجد مبيعات حتى الآن.",
+      "date": "التاريخ",
+      "course": "الدورة",
+      "student": "الطالب",
+      "amount": "المبلغ",
+      "yourCommission": "عمولتك",
+      "withdrawalHistory": "سجل السحوبات",
+      "status": "الحالة",
+      "withdrawalStatus": {
+        "pending": "قيد الانتظار",
+        "processed": "تمت المعالجة",
+        "rejected": "مرفوض"
+      }
     },
     "courseForm": {
       "createTitle": "إنشاء دورة",

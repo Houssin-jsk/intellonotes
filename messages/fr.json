@@ -7,7 +7,8 @@
     "register": "Inscription",
     "logout": "Déconnexion",
     "admin": "Administration",
-    "myCourses": "Mes cours"
+    "myCourses": "Mes cours",
+    "earnings": "Revenus"
   },
   "auth": {
     "loginTitle": "Se connecter",
@@ -246,6 +247,30 @@
       "deleteConfirmAction": "Supprimer",
       "updated": "Modifié le {date}",
       "rejectionReason": "Motif du refus"
+    },
+    "earnings": {
+      "metaTitle": "Mes revenus — IntelloNotes",
+      "title": "Mes revenus",
+      "totalEarned": "Total gagné",
+      "availableBalance": "Solde disponible",
+      "pendingWithdrawals": "Retraits en attente",
+      "totalWithdrawn": "Total retiré",
+      "commissionInfo": "Vous recevez 70% du prix de chaque cours vendu. Les 30% restants sont conservés par la plateforme.",
+      "minWithdrawal": "Montant minimum de retrait : {amount} Dh",
+      "transactionHistory": "Historique des ventes",
+      "noTransactions": "Aucune vente pour le moment.",
+      "date": "Date",
+      "course": "Cours",
+      "student": "Étudiant",
+      "amount": "Montant",
+      "yourCommission": "Votre commission",
+      "withdrawalHistory": "Historique des retraits",
+      "status": "Statut",
+      "withdrawalStatus": {
+        "pending": "En attente",
+        "processed": "Traité",
+        "rejected": "Refusé"
+      }
     },
     "courseForm": {
       "createTitle": "Créer un cours",

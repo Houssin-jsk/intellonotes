@@ -1,4 +1,4 @@
-import { eq, ne, and, like, inArray, asc, desc } from "drizzle-orm";
+import { eq, ne, and, like, inArray, asc, desc, sql } from "drizzle-orm";
 import { db } from "./index";
 import {
   users,
@@ -7,6 +7,7 @@ import {
   quizzes,
   purchases,
   progress,
+  withdrawals,
 } from "./schema";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -387,6 +388,96 @@ export function getProfessorCourseById(courseId: string, professorId: string) {
     .from(courses)
     .where(and(eq(courses.id, courseId), eq(courses.professor_id, professorId)))
     .get();
+}
+
+export function getProfessorEarnings(professorId: string) {
+  // Total confirmed earnings
+  const earningsRow = db
+    .select({
+      total: sql<number>`coalesce(sum(${purchases.professor_commission}), 0)`,
+    })
+    .from(purchases)
+    .innerJoin(courses, eq(purchases.course_id, courses.id))
+    .where(
+      and(
+        eq(courses.professor_id, professorId),
+        eq(purchases.status, "confirmed")
+      )
+    )
+    .get();
+
+  // Total withdrawn (processed)
+  const withdrawnRow = db
+    .select({
+      total: sql<number>`coalesce(sum(${withdrawals.amount}), 0)`,
+    })
+    .from(withdrawals)
+    .where(
+      and(
+        eq(withdrawals.professor_id, professorId),
+        eq(withdrawals.status, "processed")
+      )
+    )
+    .get();
+
+  // Pending withdrawals
+  const pendingWithdrawalsRow = db
+    .select({
+      total: sql<number>`coalesce(sum(${withdrawals.amount}), 0)`,
+    })
+    .from(withdrawals)
+    .where(
+      and(
+        eq(withdrawals.professor_id, professorId),
+        eq(withdrawals.status, "pending")
+      )
+    )
+    .get();
+
+  const totalEarned = earningsRow?.total ?? 0;
+  const totalWithdrawn = withdrawnRow?.total ?? 0;
+  const pendingWithdrawals = pendingWithdrawalsRow?.total ?? 0;
+  const availableBalance = totalEarned - totalWithdrawn - pendingWithdrawals;
+
+  return { totalEarned, totalWithdrawn, pendingWithdrawals, availableBalance };
+}
+
+export function getProfessorTransactions(professorId: string) {
+  return db
+    .select({
+      id: purchases.id,
+      amount_paid: purchases.amount_paid,
+      professor_commission: purchases.professor_commission,
+      purchased_at: purchases.purchased_at,
+      course_title: courses.title,
+      student_name: users.name,
+    })
+    .from(purchases)
+    .innerJoin(courses, eq(purchases.course_id, courses.id))
+    .leftJoin(users, eq(purchases.student_id, users.id))
+    .where(
+      and(
+        eq(courses.professor_id, professorId),
+        eq(purchases.status, "confirmed")
+      )
+    )
+    .orderBy(desc(purchases.purchased_at))
+    .all();
+}
+
+export function getProfessorWithdrawals(professorId: string) {
+  return db
+    .select({
+      id: withdrawals.id,
+      amount: withdrawals.amount,
+      status: withdrawals.status,
+      requested_at: withdrawals.requested_at,
+      processed_at: withdrawals.processed_at,
+    })
+    .from(withdrawals)
+    .where(eq(withdrawals.professor_id, professorId))
+    .orderBy(desc(withdrawals.requested_at))
+    .all();
 }
 
 // ── Course content for editor ─────────────────────────────────────────────────
