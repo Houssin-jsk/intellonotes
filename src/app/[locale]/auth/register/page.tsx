@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Link } from "@i18n/navigation";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 import Image from "next/image";
+import { AuthBackground } from "@/components/ui/AnimatedBackground";
 
 export async function generateMetadata({
   params,
@@ -57,9 +58,9 @@ function RegisterPageContent() {
       </div>
 
       {/* Right side: Register form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:px-12 py-16 lg:py-12 relative z-10 bg-[var(--color-primary-900)]/85 backdrop-blur-2xl overflow-y-auto">
-
-        <div className="w-full max-w-md relative z-10 animate-fade-in-scale opacity-0 delay-200 my-auto">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:px-12 py-16 lg:py-12 relative z-10 overflow-y-auto">
+        <AuthBackground />
+        <div className="w-full max-w-md relative z-20 animate-fade-in-scale opacity-0 delay-200 my-auto">
 
           <div className="neumorph rounded-[2rem] p-8 sm:p-10">
             <h1 className="text-3xl font-extrabold text-slate-900 mb-2 tracking-tight">

@@ -12,32 +12,45 @@ export function GlobalBackground() {
   if (!mounted) return null;
 
   return (
-    <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden isolate">
-      {/* Base soft gradients */}
-      <div className="absolute inset-0 bg-slate-50 opacity-90 transition-opacity duration-1000" />
+    <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden isolate bg-slate-50/50">
+      {/* Base soft background */}
+      <div className="absolute inset-0 bg-[#f4f7fc] opacity-100 transition-opacity duration-1000" />
       
-      {/* Moving gradient meshes */}
-      <div className="absolute inset-0 opacity-40 mix-blend-multiply flex items-center justify-center">
+      {/* Moving gradient meshes (Highly Visible now) */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        {/* Core Blue wave */}
         <div 
-          className="absolute w-[80vw] h-[80vh] bg-blue-100 rounded-[100%] blur-[120px] mix-blend-multiply opacity-60 animate-wave-slowest left-[-10%] top-[-20%]"
-          style={{ animationDuration: '25s' }}
+          className="absolute w-[120vw] h-[120vh] bg-blue-300 rounded-[100%] blur-[160px] opacity-40 animate-wave-slowest left-[-15%] top-[-20%] mix-blend-normal"
+          style={{ animationDuration: '28s' }}
         />
+        {/* Purple accent wave */}
         <div 
-          className="absolute w-[70vw] h-[70vh] bg-indigo-50 rounded-[100%] blur-[140px] mix-blend-multiply opacity-50 animate-wave-slow right-[-5%] top-[10%]"
-          style={{ animationDuration: '30s', animationDelay: '-5s' }}
+          className="absolute w-[90vw] h-[90vh] bg-indigo-300 rounded-[100%] blur-[160px] opacity-35 animate-wave-slow right-[-10%] top-[10%] mix-blend-normal"
+          style={{ animationDuration: '35s', animationDelay: '-5s' }}
         />
+        {/* Sky blue secondary wave */}
         <div 
-          className="absolute w-[90vw] h-[60vh] bg-[var(--color-primary-50)] rounded-[100%] blur-[100px] mix-blend-multiply opacity-70 animate-wave-medium bottom-[-10%] left-[10%]"
-          style={{ animationDuration: '20s', animationDelay: '-10s' }}
+          className="absolute w-[100vw] h-[80vh] bg-cyan-200 rounded-[100%] blur-[140px] opacity-40 animate-wave-medium bottom-[-20%] left-[5%] mix-blend-normal"
+          style={{ animationDuration: '24s', animationDelay: '-12s' }}
         />
       </div>
 
-      {/* Subtle overlay texture/noise if needed, kept very minimal */}
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.015] mix-blend-overlay"></div>
+      {/* Heavy Blur Layer to blend colors perfectly into a mesh */}
+      <div className="absolute inset-0 backdrop-blur-[80px]"></div>
+
+      {/* Extra Subtle 3D Glass Orbs visible globally */}
+      <div className="absolute inset-0 pointer-events-none perspective-1000">
+        <div className="absolute top-[20%] right-[10%] w-64 h-64 rounded-full glass bg-white/20 border border-white/40 shadow-[0_8px_32px_rgba(0,100,255,0.05),inset_0_4px_12px_rgba(255,255,255,0.8)] backdrop-blur-3xl animate-float-1 opacity-60" 
+             style={{ animationDelay: '0s' }} />
+        <div className="absolute bottom-[20%] left-[5%] w-96 h-96 rounded-full glass bg-white/10 border border-white/30 shadow-[0_8px_32px_rgba(0,100,255,0.05),inset_0_4px_12px_rgba(255,255,255,0.6)] backdrop-blur-3xl animate-float-2 opacity-50"
+             style={{ animationDelay: '-4s' }} />
+      </div>
+
+      {/* Subtle grain texture overlay for premium print feel */}
+      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
     </div>
   );
 }
-
 export function AuthBackground() {
   const [mounted, setMounted] = useState(false);
 
@@ -48,28 +61,32 @@ export function AuthBackground() {
   if (!mounted) return null;
 
   return (
-    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden isolate bg-[#0f172a]">
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden isolate bg-[#0a0f1d]">
       {/* Deep dark base */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-[var(--color-primary-900)] to-slate-950 opacity-95"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0c142e] via-[var(--color-primary-900)] to-[#070b1a] opacity-95"></div>
 
-      {/* Dynamic glowing orbs and waves inside the auth block */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-60 mix-blend-screen mix-blend-color-dodge">
+      {/* Dynamic glowing orbs and waves inside the auth block (High Visibility) */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-80 mix-blend-screen mix-blend-color-dodge">
         <div 
-          className="absolute w-[120%] h-[120%] bg-blue-600 rounded-full blur-[150px] opacity-20 animate-wave-slow"
-          style={{ animationDuration: '18s' }}
+          className="absolute w-[140%] h-[120%] bg-blue-500 rounded-[100%] blur-[120px] opacity-30 animate-wave-slow"
+          style={{ animationDuration: '24s' }}
         />
         <div 
-          className="absolute right-[-20%] top-[-10%] w-[60%] h-[70%] bg-indigo-500 rounded-full blur-[120px] opacity-30 animate-wave-medium"
-          style={{ animationDuration: '15s', animationDelay: '-4s' }}
+          className="absolute right-[-10%] top-[-10%] w-[80%] h-[80%] bg-indigo-400 rounded-full blur-[140px] opacity-40 animate-wave-medium"
+          style={{ animationDuration: '18s', animationDelay: '-4s' }}
         />
         <div 
-          className="absolute left-[-10%] bottom-[-20%] w-[80%] h-[60%] bg-[var(--color-primary-600)] rounded-full blur-[140px] opacity-20 animate-wave-slowest"
-          style={{ animationDuration: '22s', animationDelay: '-8s' }}
+          className="absolute left-[-20%] bottom-[-10%] w-[90%] h-[70%] bg-[var(--color-primary-400)] rounded-full blur-[120px] opacity-30 animate-wave-slowest"
+          style={{ animationDuration: '28s', animationDelay: '-8s' }}
         />
       </div>
 
-      {/* Subtle grid line layer for premium tech feel */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20 mask-image:linear-gradient(to_bottom,black,transparent)] pointer-events-none"></div>
+      {/* Heavy mesh blend layer for deep rich blue tech aesthetic */}
+      <div className="absolute inset-0 backdrop-blur-[60px]"></div>
+
+      {/* Premium 3D tech grid overlay */}
+      <div className="absolute inset-0 bg-[url('https://transparenttextures.com/patterns/cubes.png')] opacity-[0.05] mix-blend-overlay"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] opacity-30 mask-image:linear-gradient(to_bottom,black,transparent)] pointer-events-none"></div>
 
       <Floating3DElements />
     </div>
@@ -78,28 +95,28 @@ export function AuthBackground() {
 
 function Floating3DElements() {
   return (
-    <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden perspective-1000">
-      {/* Orb 1: Top right */}
-      <div className="absolute top-[15%] right-[10%] w-32 h-32 rounded-full glass bg-white/5 border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.1),inset_0_0_20px_rgba(255,255,255,0.2)] backdrop-blur-md animate-float-slow opacity-80" 
-           style={{ animationDuration: '12s', animationDelay: '0s' }}>
-        <div className="absolute inset-[10%] rounded-full bg-gradient-to-br from-white/20 to-transparent blur-sm"></div>
+    <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden perspective-[1200px]">
+      {/* Orb 1: Top right capsule */}
+      <div className="absolute top-[10%] right-[5%] w-48 h-64 rounded-[3rem] glass bg-white/10 border border-white/20 shadow-[0_10px_50px_rgba(255,255,255,0.05),inset_0_4px_30px_rgba(255,255,255,0.3)] backdrop-blur-2xl animate-float-capsule opacity-90" 
+           style={{ animationDelay: '0s' }}>
+        <div className="absolute top-2 left-2 right-2 h-1/2 rounded-t-[2.5rem] bg-gradient-to-b from-white/30 to-transparent blur-md"></div>
       </div>
 
-      {/* Orb 2: Bottom left huge */}
-      <div className="absolute bottom-[10%] left-[5%] w-48 h-48 rounded-full glass bg-blue-400/5 border border-blue-200/10 shadow-[0_0_60px_rgba(37,99,235,0.1),inset_0_0_30px_rgba(255,255,255,0.1)] backdrop-blur-xl animate-float-medium opacity-60"
-           style={{ animationDuration: '15s', animationDelay: '-5s' }}>
-        <div className="absolute inset-[15%] rounded-full bg-gradient-to-tl from-blue-300/10 to-transparent blur-md"></div>
+      {/* Orb 2: Bottom left huge sphere */}
+      <div className="absolute bottom-[5%] left-[0%] w-72 h-72 rounded-full glass bg-blue-300/10 border border-blue-200/20 shadow-[0_10px_80px_rgba(37,99,235,0.15),inset_0_4px_40px_rgba(255,255,255,0.2)] backdrop-blur-3xl animate-float-1 opacity-80"
+           style={{ animationDelay: '-6s' }}>
+        <div className="absolute inset-[15%] rounded-full bg-gradient-to-tl from-blue-200/20 to-transparent blur-2xl"></div>
       </div>
 
-      {/* Orb 3: Small passing by */}
-      <div className="absolute top-[40%] left-[20%] w-16 h-16 rounded-full glass border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.15)] backdrop-blur-sm animate-float-fast opacity-50"
-           style={{ animationDuration: '8s', animationDelay: '-2s' }}>
+      {/* Orb 3: Small floating sphere */}
+      <div className="absolute top-[50%] left-[25%] w-24 h-24 rounded-full glass border border-white/30 bg-white/5 shadow-[0_0_30px_rgba(255,255,255,0.15),inset_0_2px_10px_rgba(255,255,255,0.4)] backdrop-blur-md animate-float-3 opacity-90"
+           style={{ animationDelay: '-2s' }}>
       </div>
 
-      {/* Abstract floating ring / card */}
-      <div className="absolute bottom-[35%] right-[15%] w-40 h-24 rounded-2xl glass border border-indigo-200/10 bg-indigo-500/5 backdrop-blur-xl shadow-2xl animate-float-slow rotate-12 opacity-70"
-           style={{ animationDuration: '18s', animationDelay: '-7s' }}>
-        <div className="w-full h-full border-t border-l border-white/10 rounded-2xl absolute inset-0"></div>
+      {/* Floating 3D Shell Layer for center depth */}
+      <div className="absolute top-[35%] right-[25%] w-64 h-32 rounded-[2rem] glass border border-indigo-200/20 bg-indigo-400/10 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.8)] animate-float-shell opacity-80"
+           style={{ animationDelay: '-8s', transformStyle: 'preserve-3d' }}>
+        <div className="absolute inset-0 rounded-[2rem] border border-white/10 translate-z-4"></div>
       </div>
     </div>
   );

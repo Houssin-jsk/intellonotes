@@ -10,16 +10,14 @@ export function HeroSection() {
   const { user, role, isLoading } = useAuth();
 
   return (
-    <section className="relative overflow-hidden min-h-[90vh] flex items-center justify-center bg-[var(--background)] text-slate-900 border-b border-gray-200/50 py-24">
-      {/* Elegant Atmospheric Background Animations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] rounded-full bg-gradient-to-bl from-[var(--color-primary-200)] to-purple-100 blur-[130px] opacity-60 translate-x-1/3 -translate-y-1/4 animate-pulse" style={{ animationDuration: '8s' }} />
-        <div className="absolute bottom-0 left-0 w-[900px] h-[900px] rounded-full bg-gradient-to-tr from-blue-100 to-[var(--color-primary-100)] blur-[150px] opacity-60 -translate-x-1/4 translate-y-1/4 animate-pulse" style={{ animationDuration: '12s', animationDelay: '2s' }} />
-        <div className="absolute top-1/2 left-1/2 w-[600px] h-[600px] rounded-full bg-indigo-50 blur-[140px] opacity-50 -translate-x-1/2 -translate-y-1/2" />
-      </div>
+    <section className="w-full flex justify-center pt-32 pb-16 px-4">
+      <div className="relative w-full max-w-5xl rounded-[4rem] flex flex-col items-center text-center px-6 py-16 sm:px-12 sm:py-24">
+        {/* 3D Glass Layer behind Hero Content */}
+        <div className="absolute inset-0 pointer-events-none rounded-[4rem] glass bg-white/5 border border-white/20 shadow-[0_0_80px_rgba(255,255,255,0.4),inset_0_4px_30px_rgba(255,255,255,0.8)] backdrop-blur-sm opacity-60 animate-fade-in-scale"></div>
 
-      <div className="relative w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 z-10 flex flex-col items-center text-center">
-        {/* Main heading */}
+        {/* Content wrapper */}
+        <div className="relative z-10 flex flex-col items-center w-full">
+          {/* Main heading */}
         <h1 className="text-5xl sm:text-6xl lg:text-[4.5rem] font-extrabold leading-[1.1] tracking-tight mb-8 text-slate-900 animate-fade-in-up delay-200 opacity-0 drop-shadow-sm max-w-4xl">
           {t("title")}
         </h1>
@@ -94,6 +92,7 @@ export function HeroSection() {
               <span>{point}</span>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </section>
