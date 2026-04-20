@@ -57,11 +57,29 @@ export default async function LocaleLayout({
       className={`${inter.variable} ${notoSansArabic.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-white text-gray-900 antialiased" suppressHydrationWarning>
+      <body className="bg-slate-50 text-gray-900 antialiased relative min-h-screen isolate flex flex-col" suppressHydrationWarning>
+        {/* Global Premium Animated Background */}
+        <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden isolate bg-slate-50">
+          <div 
+            className="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] min-w-[600px] min-h-[600px] bg-gradient-to-br from-[var(--color-primary-100)] to-[var(--color-secondary-100)] rounded-full blur-[130px] opacity-60 animate-[pulse_12s_ease-in-out_infinite]" 
+            style={{ animationDuration: '12s' }} 
+          />
+          <div 
+            className="absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] min-w-[800px] min-h-[800px] bg-gradient-to-bl from-purple-200 to-[var(--color-primary-200)] rounded-full blur-[150px] opacity-50 animate-[pulse_15s_ease-in-out_infinite]" 
+            style={{ animationDuration: '15s', animationDelay: '3s' }} 
+          />
+          <div 
+            className="absolute bottom-[-20%] left-[10%] w-[50vw] h-[50vw] min-w-[600px] min-h-[600px] bg-gradient-to-tr from-[var(--color-secondary-200)] to-[var(--color-primary-100)] rounded-full blur-[140px] opacity-50 animate-[pulse_18s_ease-in-out_infinite]" 
+            style={{ animationDuration: '18s', animationDelay: '6s' }} 
+          />
+        </div>
+
         <SessionProvider>
           <NextIntlClientProvider messages={messages}>
             <Header />
-            {children}
+            <main className="flex-1 w-full relative z-0 flex flex-col">
+              {children}
+            </main>
           </NextIntlClientProvider>
         </SessionProvider>
       </body>

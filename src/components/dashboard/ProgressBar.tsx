@@ -17,12 +17,12 @@ export function ProgressBar({ currentAxis, isCompleted }: ProgressBarProps) {
           <div
             key={n}
             className={cn(
-              "h-1.5 flex-1 rounded-full",
+              "h-2 flex-1 rounded-full shadow-inner transition-colors",
               isDone
-                ? "bg-green-500"
+                ? "bg-emerald-400"
                 : isCurrent
-                ? "bg-[var(--color-primary-500)]"
-                : "bg-gray-200"
+                ? "bg-[var(--color-primary-400)]"
+                : "bg-slate-100"
             )}
           />
         );

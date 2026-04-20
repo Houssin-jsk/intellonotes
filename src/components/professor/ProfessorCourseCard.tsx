@@ -65,43 +65,43 @@ export function ProfessorCourseCard({ course }: ProfessorCourseCardProps) {
 
   return (
     <>
-      <div className="bg-white rounded-xl border border-gray-200 p-5 flex flex-col gap-4">
+      <div className="glass rounded-[2rem] border border-white/60 p-6 flex flex-col gap-5 hover:shadow-xl transition-all duration-300 group">
         {/* Badges */}
         <div className="flex items-center justify-between gap-2">
-          <Badge className={LANGUAGE_COLORS[course.language]}>
+          <Badge className={`shadow-sm ${LANGUAGE_COLORS[course.language]}`}>
             {LANGUAGE_DISPLAY_NAMES[course.language]}
           </Badge>
-          <Badge className={STATUS_COLORS[course.status]}>
+          <Badge className={`shadow-sm ${STATUS_COLORS[course.status]}`}>
             {t(`status.${course.status}`)}
           </Badge>
         </div>
 
         {/* Title */}
-        <h3 className="font-semibold text-gray-900 leading-snug line-clamp-2">
+        <h3 className="font-extrabold text-slate-900 text-lg leading-tight line-clamp-2 group-hover:text-[var(--color-primary-600)] transition-colors">
           {course.title}
         </h3>
 
         {/* Rejection reason */}
         {course.status === "rejected" && course.rejection_reason && (
-          <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-            <p className="text-xs font-semibold text-red-700 mb-0.5">{t("rejectionReason")}</p>
-            <p className="text-xs text-red-600">{course.rejection_reason}</p>
+          <div className="bg-rose-50/50 border border-rose-200 rounded-xl px-4 py-3 shadow-inner">
+            <p className="text-xs font-bold text-rose-700 uppercase tracking-widest mb-1">{t("rejectionReason")}</p>
+            <p className="text-sm font-medium text-rose-600">{course.rejection_reason}</p>
           </div>
         )}
 
         {/* Price + date */}
-        <div className="flex items-center justify-between text-sm">
-          <span className="font-bold text-gray-900">{course.price} Dh</span>
-          <span className="text-gray-400 text-xs">
+        <div className="flex items-center justify-between">
+          <span className="font-bold text-slate-900 border border-slate-200/60 bg-white/50 px-3 py-1 rounded-lg shadow-sm">{course.price} Dh</span>
+          <span className="text-slate-400 text-xs font-medium">
             {t("updated", { date: formattedDate })}
           </span>
         </div>
 
         {/* Actions */}
-        <div className="flex flex-wrap gap-2 mt-auto">
+        <div className="flex flex-wrap gap-3 mt-auto pt-4 border-t border-slate-200/50">
           {canEdit && (
             <Link href={`/professor/courses/${course.id}`} className="flex-1">
-              <Button variant="secondary" size="sm" className="w-full">
+              <Button variant="secondary" size="sm" className="w-full font-bold shadow-sm hover:translate-y-[-1px]">
                 {t("actions.edit")}
               </Button>
             </Link>
@@ -110,7 +110,7 @@ export function ProfessorCourseCard({ course }: ProfessorCourseCardProps) {
             <Button
               variant="primary"
               size="sm"
-              className="flex-1"
+              className="flex-1 font-bold shadow-md hover:-translate-y-[1px] btn-3d"
               isLoading={isSubmitting}
               onClick={handleSubmitForReview}
             >
@@ -123,18 +123,19 @@ export function ProfessorCourseCard({ course }: ProfessorCourseCardProps) {
             <Button
               variant="danger"
               size="sm"
+              className="font-bold shadow-sm"
               onClick={() => setShowDeleteModal(true)}
             >
               {t("actions.delete")}
             </Button>
           )}
           {course.status === "pending" && (
-            <p className="text-sm text-amber-600 font-medium w-full text-center">
+            <p className="text-sm text-amber-600 font-bold bg-amber-50 rounded-lg py-2 w-full text-center border border-amber-200/50">
               {t("actions.underReview")}
             </p>
           )}
           {course.status === "approved" && (
-            <p className="text-sm text-green-600 font-medium w-full text-center">
+            <p className="text-sm text-emerald-600 font-bold bg-emerald-50 rounded-lg py-2 w-full text-center border border-emerald-200/50">
               {t("actions.published")}
             </p>
           )}

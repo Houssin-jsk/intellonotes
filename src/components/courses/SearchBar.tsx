@@ -37,14 +37,15 @@ export function SearchBar({ initialQ = "" }: SearchBarProps) {
   // Intentionally omitting router/pathname/searchParams to prevent re-trigger on URL change
 
   return (
-    <div className="relative">
-      <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+    <div className="relative max-w-2xl w-full group">
+      <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary-200)] to-[var(--color-primary-400)] rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity duration-500 pointer-events-none"></div>
+      <Search className="absolute start-6 top-1/2 -translate-y-1/2 h-6 w-6 text-[var(--color-primary-500)] group-focus-within:text-[var(--color-primary-600)] transition-colors pointer-events-none z-10" />
       <input
         type="search"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={t("search")}
-        className="w-full rounded-xl border border-gray-200 bg-white ps-10 pe-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-600)] focus:border-transparent placeholder:text-gray-400"
+        className="relative w-full rounded-full border-2 border-white/80 bg-white/60 backdrop-blur-xl ps-16 pe-8 py-5 text-lg font-medium shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[var(--color-primary-200)] focus:border-[var(--color-primary-400)] focus:bg-white focus:shadow-xl placeholder:text-slate-400 text-slate-800"
       />
     </div>
   );

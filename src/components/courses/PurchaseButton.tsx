@@ -145,24 +145,24 @@ export function PurchaseButton({
         ) : (
           <div className="space-y-4">
             {/* CashPlus */}
-            <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
-              <p className="font-medium text-orange-900 text-sm mb-1">
+            <div className="p-4 bg-orange-50/50 border border-orange-200/60 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm">
+              <p className="font-bold text-orange-900 text-sm mb-1 uppercase tracking-wider">
                 {t("paymentModal.cashplus")}
               </p>
-              <p className="text-sm text-orange-700 font-mono">+212 6XX-XXX-XXX</p>
+              <p className="text-base text-orange-700 font-mono font-bold">+212 6XX-XXX-XXX</p>
             </div>
 
             {/* Bank transfer */}
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="font-medium text-blue-900 text-sm mb-1">
+            <div className="p-4 bg-teal-50/50 border border-teal-200/60 rounded-2xl flex flex-col items-center justify-center text-center shadow-sm">
+              <p className="font-bold text-teal-900 text-sm mb-1 uppercase tracking-wider">
                 {t("paymentModal.bankTransfer")}
               </p>
-              <p className="text-sm text-blue-700 font-mono">
+              <p className="text-sm text-teal-700 font-mono font-bold tracking-tight">
                 RIB: 000 000 0000000000000000 00
               </p>
             </div>
 
-            <p className="text-center text-xl font-bold text-gray-900">{price} Dh</p>
+            <p className="text-center text-3xl font-extrabold text-slate-900 py-4">{price} Dh</p>
 
             {formError && (
               <p className="text-sm text-red-600 text-center">{formError}</p>

@@ -39,75 +39,86 @@ export function AxisTOC({ lessons, isPurchased }: AxisTOCProps) {
   });
 
   return (
-    <div className="border border-gray-200 rounded-xl divide-y divide-gray-200 overflow-hidden">
+    <div className="space-y-4">
       {axisGroups.map(({ axis, lessons: axisLessons }) => {
         const isOpen = openAxis === axis;
         const isLocked = axis > 1 && !isPurchased;
         const isPreview = axis === 1;
 
         return (
-          <div key={axis}>
+          <div key={axis} className="glass rounded-2xl border border-white/60 shadow-sm overflow-hidden transition-all duration-300">
             <button
               type="button"
-              className="w-full flex items-center justify-between px-4 py-3 text-start hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center justify-between px-6 py-4 text-start hover:bg-white/40 transition-colors"
               onClick={() => setOpenAxis(isOpen ? null : axis)}
               aria-expanded={isOpen}
             >
-              <div className="flex items-center gap-3 min-w-0">
+              <div className="flex items-center gap-4 min-w-0">
                 {isLocked ? (
-                  <Lock size={16} className="text-gray-400 shrink-0" />
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
+                    <Lock size={14} className="text-slate-400" />
+                  </div>
                 ) : (
-                  <span className="w-4 h-4 shrink-0 rounded-full border-2 border-[var(--color-primary-600)]" />
+                  <div className="w-8 h-8 rounded-full bg-[var(--color-primary-50)] text-[var(--color-primary-600)] flex items-center justify-center shrink-0 font-bold text-sm">
+                    {axis}
+                  </div>
                 )}
-                <span className="font-medium text-gray-900 text-sm truncate">
-                  {t("axis", { number: axis })} — {axisNames[axis - 1]}
+                <span className="font-bold text-slate-800 text-base truncate">
+                  {axisNames[axis - 1]}
                 </span>
                 {isPreview && (
-                  <span className="shrink-0 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                  <span className="shrink-0 text-[10px] font-bold uppercase tracking-widest bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full shadow-sm">
                     {t("freePreview")}
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-2 ms-3 shrink-0">
-                <span className="text-xs text-gray-400">
+              <div className="flex items-center gap-3 ms-4 shrink-0">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   {axisLessons.length} {t("lessonsLabel")}
                 </span>
                 <ChevronDown
-                  size={16}
+                  size={18}
                   className={cn(
-                    "text-gray-400 transition-transform",
+                    "text-slate-400 transition-transform duration-300",
                     isOpen && "rotate-180"
                   )}
                 />
               </div>
             </button>
 
-            {isOpen && (
-              <div className="bg-gray-50 px-4 pb-3 pt-1">
+            <div
+              className={cn(
+                "transition-all duration-300 ease-in-out px-6 overflow-hidden",
+                isOpen ? "max-h-[1000px] pb-5 opacity-100" : "max-h-0 pb-0 opacity-0"
+              )}
+            >
+              <div className="pt-2 border-t border-slate-200/50 mt-2">
                 {isLocked ? (
-                  <p className="text-sm text-gray-500 py-2 flex items-center gap-2">
-                    <Lock size={14} className="shrink-0" />
+                  <p className="text-sm text-slate-500 py-3 flex items-center gap-2 font-medium bg-slate-50/50 p-4 rounded-xl">
+                    <Lock size={16} className="shrink-0" />
                     {t("lockedAxisMessage")}
                   </p>
                 ) : axisLessons.length > 0 ? (
-                  <ul className="space-y-1.5">
-                    {axisLessons.map((lesson) => (
+                  <ul className="space-y-3 mt-3">
+                    {axisLessons.map((lesson, idx) => (
                       <li
                         key={lesson.id}
-                        className="text-sm text-gray-700 flex items-start gap-2 py-0.5"
+                        className="text-sm text-slate-700 flex items-start gap-3 py-1 group cursor-default"
                       >
-                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-gray-400 shrink-0" />
-                        {lesson.title}
+                        <span className="mt-1 w-5 h-5 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-400 shrink-0 group-hover:border-[var(--color-primary-400)] group-hover:text-[var(--color-primary-600)] transition-colors">
+                          {idx + 1}
+                        </span>
+                        <span className="font-medium group-hover:text-slate-900 transition-colors">{lesson.title}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-sm text-gray-400 py-2 italic">
+                  <p className="text-sm text-slate-400 py-3 italic bg-slate-50/50 p-4 rounded-xl text-center">
                     {t("noLessonsYet")}
                   </p>
                 )}
               </div>
-            )}
+            </div>
           </div>
         );
       })}

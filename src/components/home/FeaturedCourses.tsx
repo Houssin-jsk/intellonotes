@@ -21,33 +21,40 @@ export async function FeaturedCourses() {
   }));
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 relative overflow-hidden bg-white">
+      <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-[var(--color-primary-200)] to-transparent opacity-50" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900">{t("title")}</h2>
-            <p className="mt-2 text-gray-500">{t("subtitle")}</p>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 animate-fade-in-up">
+          <div className="max-w-2xl">
+             <span className="inline-block py-1.5 px-4 rounded-full bg-[var(--color-primary-50)] text-[var(--color-primary-700)] font-bold text-sm tracking-wide mb-4 border border-[var(--color-primary-100)] shadow-sm">
+              Discover
+            </span>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">{t("title")}</h2>
+            <p className="text-lg text-slate-500 font-medium">{t("subtitle")}</p>
           </div>
           <Link
             href="/courses"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-primary-600)] hover:text-[var(--color-primary-700)] transition-colors shrink-0"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-primary-50)] text-[var(--color-primary-700)] rounded-xl font-bold hover:bg-[var(--color-primary-100)] transition-all shrink-0 hover:shadow-md hover:-translate-y-0.5 border border-[var(--color-primary-100)] group"
           >
             {t("viewAll")}
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
         {/* Course grid or empty state */}
         {featured.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-gray-500 font-medium">{t("empty")}</p>
-            <p className="text-sm text-gray-400 mt-1">{t("emptyHint")}</p>
+          <div className="text-center py-24 glass rounded-[2rem] border border-white/60 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+            <p className="text-slate-600 font-bold text-lg">{t("empty")}</p>
+            <p className="text-sm text-slate-400 mt-2">{t("emptyHint")}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featured.map((course) => (
-              <CourseCard key={course.id} course={course} />
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            {featured.map((course, i) => (
+              <div key={course.id} style={{ animationDelay: `${i * 100}ms` }} className="animate-fade-in-up">
+                 <CourseCard course={course} />
+              </div>
             ))}
           </div>
         )}

@@ -27,9 +27,11 @@ export async function CourseGrid({ q, language, level }: CourseGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {courses.map((course) => (
-        <CourseCard key={course.id} course={course} />
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      {courses.map((course, i) => (
+        <div key={course.id} style={{ animationDelay: `${i * 100}ms` }} className="animate-fade-in-up">
+           <CourseCard course={course} />
+        </div>
       ))}
     </div>
   );
@@ -38,9 +40,12 @@ export async function CourseGrid({ q, language, level }: CourseGridProps) {
 function EmptyState() {
   const t = useTranslations("catalog");
   return (
-    <div className="text-center py-16">
-      <p className="text-gray-500 font-medium">{t("noResults")}</p>
-      <p className="text-sm text-gray-400 mt-1">{t("noResultsHint")}</p>
+    <div className="text-center py-24 glass rounded-[2.5rem] border border-white/60 shadow-xl mt-6 animate-fade-in-scale">
+      <div className="w-16 h-16 bg-gradient-to-br from-slate-100 to-slate-50 rounded-[1.25rem] flex items-center justify-center mx-auto mb-6 shadow-inner border border-slate-200">
+         <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+      <p className="text-slate-800 font-extrabold text-2xl mb-2">{t("noResults")}</p>
+      <p className="text-lg text-slate-500 font-medium max-w-sm mx-auto leading-relaxed">{t("noResultsHint")}</p>
     </div>
   );
 }

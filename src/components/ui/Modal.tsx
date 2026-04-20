@@ -26,7 +26,7 @@ export function Modal({ isOpen, onClose, title, closeLabel = "Close", children }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="fixed inset-0 bg-black/50"
+        className="fixed inset-0 bg-[#0f172a]/30 backdrop-blur-sm transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -34,10 +34,10 @@ export function Modal({ isOpen, onClose, title, closeLabel = "Close", children }
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
-        className="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6 z-10"
+        className="relative bg-white/95 backdrop-blur-xl border border-white/60 rounded-3xl shadow-2xl max-w-md w-full p-8 z-10"
       >
-        <div className="flex items-center justify-between mb-4">
-          <h2 id="modal-title" className="text-lg font-semibold text-gray-900">
+        <div className="flex items-center justify-between mb-6">
+          <h2 id="modal-title" className="text-xl font-bold tracking-tight text-gray-900">
             {title}
           </h2>
           <button

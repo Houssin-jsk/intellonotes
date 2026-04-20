@@ -70,27 +70,30 @@ function AxisItem({
       disabled={!isUnlocked}
       onClick={() => onSelect(axisNumber)}
       className={cn(
-        "w-full text-start flex items-start gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm",
-        isUnlocked ? "hover:bg-gray-100 cursor-pointer" : "cursor-not-allowed opacity-50",
-        isCurrent && "bg-purple-50 text-[var(--color-primary-600)]"
+        "w-full text-start flex items-start gap-4 px-4 py-3 rounded-2xl transition-all duration-300",
+        isUnlocked ? "hover:bg-white/80 cursor-pointer shadow-sm border border-transparent hover:border-slate-200" : "cursor-not-allowed opacity-40 grayscale",
+        isCurrent && "glass border-white/80 shadow-md ring-1 ring-[var(--color-primary-200)] scale-[1.02]"
       )}
     >
       {/* Status icon */}
-      <span className="mt-0.5 shrink-0">
+      <span className={cn(
+        "mt-0.5 shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-inner",
+        isCompleted ? "bg-emerald-100 text-emerald-600" : isCurrent ? "bg-[var(--color-primary-50)] text-[var(--color-primary-600)]" : "bg-slate-100 text-slate-400"
+      )}>
         {isCompleted ? (
-          <CheckCircle size={16} className="text-green-500" />
+          <CheckCircle size={16} className="font-bold" />
         ) : isUnlocked ? (
-          <Circle size={16} className={isCurrent ? "text-[var(--color-primary-600)]" : "text-gray-400"} />
+          <Circle size={16} />
         ) : (
-          <Lock size={16} className="text-gray-300" />
+          <Lock size={14} />
         )}
       </span>
 
-      <div className="min-w-0">
-        <p className={cn("font-medium leading-tight", isCurrent ? "text-[var(--color-primary-600)]" : "text-gray-800")}>
+      <div className="min-w-0 flex-1">
+        <p className={cn("font-bold text-sm leading-tight transition-colors", isCurrent ? "text-[var(--color-primary-700)]" : "text-slate-700")}>
           {t("axis", { number: axisNumber })} — {t(`axisNames.${axisNumber}` as Parameters<typeof t>[0])}
         </p>
-        <p className="text-xs text-gray-400 mt-0.5">
+        <p className="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-widest">
           {lessonCount} {t("lessonsLabel")}
         </p>
       </div>

@@ -95,10 +95,10 @@ export function RegisterForm() {
             <label
               key={r}
               className={cn(
-                "flex-1 flex items-center justify-center gap-2 rounded-lg border-2 p-3 cursor-pointer transition-colors text-sm font-medium",
+                "flex-1 flex items-center justify-center gap-2 rounded-xl border-2 p-3 cursor-pointer transition-all text-sm font-bold shadow-sm",
                 role === r
-                  ? "border-[var(--color-primary-600)] bg-purple-50 text-[var(--color-primary-600)]"
-                  : "border-gray-200 text-gray-600 hover:border-gray-300"
+                  ? "border-[var(--color-primary-500)] bg-[var(--color-primary-50)] text-[var(--color-primary-700)] shadow-[0_0_15px_rgba(124,58,237,0.15)]"
+                  : "border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:bg-gray-50"
               )}
             >
               <input

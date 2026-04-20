@@ -167,126 +167,158 @@ export function LearningLayout({
   );
 
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex h-screen bg-[#f8fafc] overflow-hidden">
       {/* ── Desktop sidebar ── */}
-      <aside className="hidden lg:block w-72 shrink-0 border-e border-gray-200">
-        <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto p-4">
+      <aside className="hidden lg:block w-80 shrink-0 border-e border-slate-200/60 bg-white/40 backdrop-blur-3xl shadow-[4px_0_24px_rgba(0,0,0,0.02)] z-20">
+        <div className="h-full overflow-y-auto p-6 scrollbar-hide">
           <ProgressSidebar axes={axisList} onSelectAxis={handleSelectAxis} />
         </div>
       </aside>
 
       {/* ── Main content ── */}
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden relative">
         {/* Top bar */}
-        <div className="sticky top-16 z-10 bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3">
-          <Link
-            href={`/courses/${courseId}`}
-            className="text-sm text-gray-500 hover:text-gray-700 shrink-0"
-          >
-            {locale === 'ar' ? '\u2192' : '\u2190'}
-          </Link>
-          <h1 className="font-semibold text-gray-900 text-sm truncate">
-            {courseTitle}
-          </h1>
+        <div className="shrink-0 z-30 bg-white/70 backdrop-blur-xl border-b border-slate-200/50 px-6 py-4 flex items-center justify-between shadow-sm">
+          <div className="flex items-center gap-4 min-w-0">
+            <Link
+              href={`/courses/${courseId}`}
+              className="w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm flex items-center justify-center text-slate-500 hover:text-[var(--color-primary-600)] hover:border-[var(--color-primary-200)] hover:bg-[var(--color-primary-50)] transition-all hover:scale-105 shrink-0"
+            >
+               <span className="text-xl leading-none -mt-0.5">{locale === 'ar' ? '\u2192' : '\u2190'}</span>
+            </Link>
+            <h1 className="font-extrabold text-slate-900 text-lg truncate tracking-tight">
+              {courseTitle}
+            </h1>
+          </div>
           {isCompleted && (
-            <span className="shrink-0 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+            <span className="shrink-0 text-xs font-bold uppercase tracking-widest bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full shadow-sm">
               {t("completed")}
             </span>
           )}
         </div>
 
-        <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-3xl mx-auto space-y-8">
-          {/* Mobile axis strip */}
-          <div className="lg:hidden">
-            <ProgressSidebar
-              axes={axisList}
-              onSelectAxis={handleSelectAxis}
-              mobile
-            />
-          </div>
+        {/* Scrollable Main Area */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8 lg:p-12 scrollbar-hide">
+          <div className="max-w-4xl mx-auto space-y-10 relative z-10 pb-20">
+            {/* Mobile axis strip */}
+            <div className="lg:hidden mb-8">
+              <ProgressSidebar
+                axes={axisList}
+                onSelectAxis={handleSelectAxis}
+                mobile
+              />
+            </div>
 
-          {/* Axis heading */}
-          <div>
-            <p className="text-xs font-semibold text-[var(--color-primary-600)] uppercase tracking-wide mb-1">
-              {tCourse("axis", { number: selectedAxis })}
-            </p>
-            <h2 className="text-2xl font-bold text-gray-900">
-              {tCourse(`axisNames.${selectedAxis}` as Parameters<typeof tCourse>[0])}
-            </h2>
-          </div>
+            {/* Axis heading */}
+            <div className="glass rounded-[2rem] p-8 sm:p-10 border border-white shadow-xl relative overflow-hidden">
+               {/* Decorative glow */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--color-primary-200)] opacity-20 blur-3xl rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+              <div className="relative z-10">
+                <p className="text-xs font-black text-[var(--color-primary-500)] uppercase tracking-widest mb-3">
+                  {tCourse("axis", { number: selectedAxis })}
+                </p>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight tracking-tight">
+                  {tCourse(`axisNames.${selectedAxis}` as Parameters<typeof tCourse>[0])}
+                </h2>
+              </div>
+            </div>
 
-          {/* PDF viewer */}
-          {pdfUrl && (
+            {/* PDF viewer */}
+            {pdfUrl && (
+              <SectionErrorBoundary fallbackMessage={tCommon("error")} retryLabel={tCommon("retry")}>
+                <div className="neumorph rounded-3xl p-2 sm:p-4 bg-white/40">
+                  <PDFViewer url={pdfUrl} />
+                </div>
+              </SectionErrorBoundary>
+            )}
+
+            {/* Lesson content */}
+            {axisLessons.length > 0 ? (
+              <div className="space-y-8">
+                {axisLessons.map((lesson) => (
+                  <article key={lesson.id} className="glass rounded-[2rem] p-8 sm:p-10 border border-white shadow-lg space-y-6">
+                    <h3 className="font-extrabold text-2xl text-slate-900">{lesson.title}</h3>
+                    {lesson.content && (
+                      <div className="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed whitespace-pre-wrap font-medium">
+                        {lesson.content}
+                      </div>
+                    )}
+                  </article>
+                ))}
+              </div>
+            ) : (
+              !pdfUrl && (
+                <div className="glass rounded-3xl p-12 text-center border-white shadow-sm flex flex-col items-center justify-center min-h-[200px]">
+                  <p className="text-slate-400 italic text-lg font-medium">{t("noContent")}</p>
+                </div>
+              )
+            )}
+
+            {/* Code playground */}
+            {canRunCode && (
+              <SectionErrorBoundary fallbackMessage={tCommon("error")} retryLabel={tCommon("retry")}>
+                <div className="neumorph rounded-[2rem] p-3 sm:p-5">
+                   <CodePlayground language={language} courseId={courseId} />
+                </div>
+              </SectionErrorBoundary>
+            )}
+
+            {/* Quiz */}
             <SectionErrorBoundary fallbackMessage={tCommon("error")} retryLabel={tCommon("retry")}>
-              <PDFViewer url={pdfUrl} />
-            </SectionErrorBoundary>
-          )}
+              {showQuiz && (
+                <div className="glass rounded-[2rem] p-8 sm:p-10 border border-white shadow-2xl">
+                  <QuizEngine
+                    quiz={axisQuiz}
+                    axisNumber={selectedAxis}
+                    onComplete={handleQuizComplete}
+                  />
+                </div>
+              )}
 
-          {/* Lesson content */}
-          {axisLessons.length > 0 ? (
-            <div className="space-y-6">
-              {axisLessons.map((lesson) => (
-                <article key={lesson.id} className="space-y-2">
-                  <h3 className="font-semibold text-gray-900">{lesson.title}</h3>
-                  {lesson.content && (
-                    <div className="prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap">
-                      {lesson.content}
+              {/* Already-passed quiz banner */}
+              {axisQuiz && (quizAlreadyPassed || completedInSession.has(selectedAxis)) && (
+                <div className="rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/60 p-6 flex items-center justify-between shadow-sm">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xl shadow-inner">
+                      ✓
+                    </div>
+                    <div>
+                      <p className="text-emerald-900 font-extrabold text-lg">{t("quiz.passed")}</p>
+                    </div>
+                  </div>
+                  {quizScores[selectedAxis] && (
+                    <div className="text-right">
+                      <span className="block font-black text-2xl text-emerald-700">
+                        {quizScores[selectedAxis].score}<span className="text-lg text-emerald-500">/{quizScores[selectedAxis].total}</span>
+                      </span>
                     </div>
                   )}
-                </article>
-              ))}
-            </div>
-          ) : (
-            !pdfUrl && (
-              <p className="text-gray-400 italic text-sm">{t("noContent")}</p>
-            )
-          )}
-
-          {/* Code playground */}
-          {canRunCode && (
-            <SectionErrorBoundary fallbackMessage={tCommon("error")} retryLabel={tCommon("retry")}>
-              <CodePlayground language={language} courseId={courseId} />
+                </div>
+              )}
             </SectionErrorBoundary>
-          )}
 
-          {/* Quiz */}
-          <SectionErrorBoundary fallbackMessage={tCommon("error")} retryLabel={tCommon("retry")}>
-            {showQuiz && (
-              <QuizEngine
-                quiz={axisQuiz}
-                axisNumber={selectedAxis}
-                onComplete={handleQuizComplete}
-              />
-            )}
-
-            {/* Already-passed quiz banner */}
-            {axisQuiz && (quizAlreadyPassed || completedInSession.has(selectedAxis)) && (
-              <div className="rounded-xl bg-green-50 border border-green-200 p-4 text-sm text-green-800 font-medium">
-                ✓ {t("quiz.passed")}
-                {quizScores[selectedAxis] && (
-                  <span className="ms-2 font-normal text-green-700">
-                    ({quizScores[selectedAxis].score}/{quizScores[selectedAxis].total})
-                  </span>
-                )}
+            {/* Course completion banner */}
+            {isCompleted && selectedAxis === 5 && (
+              <div className="rounded-[2.5rem] bg-gradient-to-r from-[var(--color-primary-600)] to-[var(--color-primary-500)] p-12 text-center space-y-6 shadow-2xl relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none" />
+                <div className="w-24 h-24 rounded-full bg-white/20 mx-auto flex items-center justify-center shadow-xl backdrop-blur-md">
+                  <p className="text-5xl">🎓</p>
+                </div>
+                <div>
+                   <p className="font-extrabold text-white text-3xl tracking-tight mb-2">
+                     {t("quiz.courseComplete")}
+                   </p>
+                   <p className="text-white/80 font-medium text-lg">You have successfully mastered all topics.</p>
+                </div>
+                <Link
+                  href="/"
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-[var(--color-primary-700)] rounded-xl font-bold text-lg hover:scale-105 transition-transform shadow-xl btn-3d mt-4"
+                >
+                  {t("browseCatalog")}
+                </Link>
               </div>
             )}
-          </SectionErrorBoundary>
-
-          {/* Course completion banner */}
-          {isCompleted && selectedAxis === 5 && (
-            <div className="rounded-xl bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 p-6 text-center space-y-2">
-              <p className="text-2xl">🎓</p>
-              <p className="font-bold text-gray-900 text-lg">
-                {t("quiz.courseComplete")}
-              </p>
-              <Link
-                href="/"
-                className="inline-block mt-2 text-sm text-[var(--color-primary-600)] hover:underline"
-              >
-                {t("browseCatalog")}
-              </Link>
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
