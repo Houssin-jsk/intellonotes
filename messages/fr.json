@@ -447,5 +447,99 @@
       "title": "IntelloNotes — Apprenez à programmer",
       "description": "Cours de programmation pour étudiants marocains. Python, JavaScript, C, Java et plus encore."
     }
+  },
+  "landing": {
+    "meta": {
+      "title": "IntelloNotes — Apprenez à programmer",
+      "description": "Cours de programmation structurés pour étudiants marocains. Python, JavaScript, Java, C et plus encore."
+    },
+    "hero": {
+      "title": "Maîtrisez la programmation, pas à pas",
+      "subtitle": "Des cours structurés en 5 axes, conçus pour les étudiants marocains. Progressez de façon claire, validée et à votre rythme.",
+      "browseCourses": "Explorer les cours",
+      "loginCTA": "Se connecter",
+      "registerCTA": "Créer un compte gratuit",
+      "dashboardCTA": "Mon tableau de bord",
+      "professorCTA": "Mes cours",
+      "adminCTA": "Administration",
+      "trust1": "Cours structurés et validés",
+      "trust2": "Apprentissage progressif",
+      "trust3": "Suivi de progression intégré"
+    },
+    "value": {
+      "title": "Pourquoi IntelloNotes ?",
+      "subtitle": "Une plateforme pensée pour un apprentissage rigoureux et efficace.",
+      "item1Title": "Apprentissage structuré",
+      "item1Desc": "Chaque cours suit une progression logique en 5 axes : introduction, théorie, pratique, synthèse et évaluation.",
+      "item2Title": "Cours validés",
+      "item2Desc": "Tous les cours publiés sont soumis à un processus de révision avant d'apparaître dans le catalogue.",
+      "item3Title": "Expérience par rôle",
+      "item3Desc": "Étudiant, professeur ou admin — chaque rôle dispose de son propre espace adapté.",
+      "item4Title": "Suivi de progression",
+      "item4Desc": "Votre avancement est enregistré axe par axe avec des quiz de validation à chaque étape.",
+      "item5Title": "Apprentissage pratique",
+      "item5Desc": "Certains cours incluent un environnement de code en ligne pour pratiquer directement dans le navigateur."
+    },
+    "axes": {
+      "title": "Une structure en 5 axes",
+      "subtitle": "Chaque cours est divisé en 5 axes pour une progression claire et maîtrisée.",
+      "axis1Name": "Introduction",
+      "axis1Desc": "Présentation du langage, du contexte et des objectifs du cours.",
+      "axis2Name": "Théorie",
+      "axis2Desc": "Concepts fondamentaux expliqués avec clarté et des exemples concrets.",
+      "axis3Name": "Pratique",
+      "axis3Desc": "Exercices guidés et code interactif pour appliquer ce qui a été appris.",
+      "axis4Name": "Synthèse",
+      "axis4Desc": "Récapitulatif des notions clés et consolidation des acquis.",
+      "axis5Name": "Évaluation finale",
+      "axis5Desc": "Quiz final pour valider votre maîtrise de l'ensemble du cours.",
+      "badge": "Axe {number}"
+    },
+    "featured": {
+      "title": "Cours disponibles",
+      "subtitle": "Découvrez nos cours validés et commencez à apprendre dès aujourd'hui.",
+      "viewAll": "Voir tous les cours",
+      "empty": "Aucun cours disponible pour le moment.",
+      "emptyHint": "Revenez bientôt, de nouveaux cours sont en préparation."
+    },
+    "roles": {
+      "title": "Une plateforme pour chacun",
+      "subtitle": "Trois rôles distincts, chacun avec son propre espace et ses propres fonctionnalités.",
+      "studentTitle": "Étudiant",
+      "studentDesc": "Parcourez le catalogue, achetez des cours et progressez axe par axe à votre rythme. Votre avancement est suivi automatiquement.",
+      "studentCTA": "Commencer à apprendre",
+      "professorTitle": "Professeur",
+      "professorDesc": "Créez vos cours, organisez-les en 5 axes, soumettez-les pour validation et suivez vos revenus directement sur la plateforme.",
+      "professorCTA": "Créer un cours",
+      "adminTitle": "Administrateur",
+      "adminDesc": "Examinez les cours soumis, confirmez les paiements des étudiants et traitez les demandes de retrait des professeurs.",
+      "adminCTA": "Gérer la plateforme"
+    },
+    "howItWorks": {
+      "title": "Comment ça marche ?",
+      "subtitle": "En quelques étapes simples, commencez à apprendre.",
+      "step1Title": "Découvrez les cours",
+      "step1Desc": "Parcourez le catalogue et trouvez le cours qui correspond à your niveau et objectifs.",
+      "step2Title": "Achetez et confirmez",
+      "step2Desc": "Effectuez votre paiement (CashPlus ou virement). L'admin confirme et débloque votre accès.",
+      "step3Title": "Apprenez axe par axe",
+      "step3Desc": "Suivez les 5 axes du cours, validez chaque quiz et progressez à votre rythme.",
+      "step4Title": "Suivez vos progrès",
+      "step4Desc": "Votre tableau de bord affiche votre avancement sur chaque cours acheté."
+    },
+    "finalCta": {
+      "title": "Prêt à commencer ?",
+      "subtitle": "Rejoignez IntelloNotes et commencez votre parcours en programmation dès aujourd'hui.",
+      "guestPrimary": "Créer un compte gratuit",
+      "guestSecondary": "Explorer les cours",
+      "loggedInPrimary": "Accéder à mon espace",
+      "loggedInSecondary": "Explorer les cours"
+    }
+  },
+  "catalogPage": {
+    "meta": {
+      "title": "Catalogue des cours — IntelloNotes",
+      "description": "Parcourez tous nos cours de programmation approuvés. Filtrez par langage et niveau."
+    }
   }
 }

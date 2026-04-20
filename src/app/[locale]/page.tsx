@@ -1,9 +1,13 @@
 import { Suspense } from "react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
-import { SearchBar } from "@/components/courses/SearchBar";
-import { FilterChips } from "@/components/courses/FilterChips";
-import { CourseGrid } from "@/components/courses/CourseGrid";
+import { HeroSection } from "@/components/home/HeroSection";
+import { ValueSection } from "@/components/home/ValueSection";
+import { AxesSection } from "@/components/home/AxesSection";
+import { FeaturedCourses } from "@/components/home/FeaturedCourses";
+import { RolesSection } from "@/components/home/RolesSection";
+import { HowItWorks } from "@/components/home/HowItWorks";
+import { FinalCTA } from "@/components/home/FinalCTA";
 import { CourseGridSkeleton } from "@/components/courses/CourseCardSkeleton";
 
 export async function generateMetadata({
@@ -12,44 +16,53 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "HomePage" });
+  const t = await getTranslations({ locale, namespace: "landing" });
   return {
     title: t("meta.title"),
     description: t("meta.description"),
   };
 }
 
-export default async function HomePage({
+export default async function LandingPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ q?: string; language?: string; level?: string }>;
 }) {
   const { locale } = await params;
-  const { q, language, level } = await searchParams;
   setRequestLocale(locale);
 
-  const t = await getTranslations("catalog");
-
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Page header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">{t("title")}</h1>
-        <p className="mt-2 text-gray-600">{t("subtitle")}</p>
-      </div>
+    <main>
+      {/* 1. Hero */}
+      <HeroSection />
 
-      {/* Search + Filters */}
-      <div className="flex flex-col gap-4 mb-8">
-        <SearchBar initialQ={q} />
-        <FilterChips language={language} level={level} />
-      </div>
+      {/* 2. Platform value */}
+      <ValueSection />
 
-      {/* Course grid — Suspense boundary shows skeleton while fetching */}
-      <Suspense fallback={<CourseGridSkeleton />}>
-        <CourseGrid q={q} language={language} level={level} />
+      {/* 3. 5-axis learning structure */}
+      <AxesSection />
+
+      {/* 4. Featured courses — real DB data, Suspense skeleton while loading */}
+      <Suspense
+        fallback={
+          <section className="py-20 bg-gray-50">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <CourseGridSkeleton />
+            </div>
+          </section>
+        }
+      >
+        <FeaturedCourses />
       </Suspense>
+
+      {/* 5. Role-based explanation */}
+      <RolesSection />
+
+      {/* 6. How it works */}
+      <HowItWorks />
+
+      {/* 7. Final CTA */}
+      <FinalCTA />
     </main>
   );
 }
